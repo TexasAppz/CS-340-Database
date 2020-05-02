@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Menu from '../views/Menu.vue';
+import Login from '../views/Login.vue';
+import Register from '../views/Register.vue';
 
 Vue.use(VueRouter);
 
@@ -20,6 +22,16 @@ const routes = [
         path: '/Menu/:id',
         name: 'MenuWithId',
         component: Menu
+    },
+    {
+        path: '/Login',
+        name: 'Login',
+        component: Login
+    },
+    {
+        path: '/Register',
+        name: 'Register',
+        component: Register
     }
 ];
 
