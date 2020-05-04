@@ -1,5 +1,5 @@
 <template>
-<<<<<<< HEAD
+<!-- <<<<<<< HEAD -->
   <div class="wrapper">
   <form class="form-signin">
     <h2 class="form-signin-heading">Login</h2>
@@ -11,8 +11,8 @@
     <button class="btn btn-lg btn-primary2 btn-block"  type="submit">Login</button>
   </form>
 </div>
-=======
-    <div>
+<!-- ======= -->
+    <!-- <div>
         <h1 class="test">Login Page</h1>
 
         <div>
@@ -79,8 +79,8 @@
                 <pre class="m-0">{{ form }}</pre>
             </b-card>
         </div>
-    </div>
->>>>>>> 01d111a8b7e9aa78cb7376dd9dcc2442ed1ad3c9
+    </div> -->
+<!-- >>>>>>> 01d111a8b7e9aa78cb7376dd9dcc2442ed1ad3c9 -->
 </template>
 <script>
 export default {
@@ -103,33 +103,33 @@ export default {
             show: true
         };
     },
-<<<<<<< HEAD
+// <<<<<<< HEAD
   };
-=======
-    methods: {
-        onSubmit(evt) {
-            evt.preventDefault();
-            alert(JSON.stringify(this.form));
-        },
-        onReset(evt) {
-            evt.preventDefault();
-            // Reset our form values
-            this.form.email = '';
-            this.form.name = '';
-            this.form.food = null;
-            this.form.checked = [];
-            // Trick to reset/clear native browser form validation state
-            this.show = false;
-            this.$nextTick(() => {
-                this.show = true;
-            });
-        }
-    }
-};
->>>>>>> 01d111a8b7e9aa78cb7376dd9dcc2442ed1ad3c9
+// =======
+//     methods: {
+//         onSubmit(evt) {
+//             evt.preventDefault();
+//             alert(JSON.stringify(this.form));
+//         },
+//         onReset(evt) {
+//             evt.preventDefault();
+//             // Reset our form values
+//             this.form.email = '';
+//             this.form.name = '';
+//             this.form.food = null;
+//             this.form.checked = [];
+//             // Trick to reset/clear native browser form validation state
+//             this.show = false;
+//             this.$nextTick(() => {
+//                 this.show = true;
+//             });
+//         }
+//     }
+// };
+// >>>>>>> 01d111a8b7e9aa78cb7376dd9dcc2442ed1ad3c9
 </script>
 <style scoped>
-<<<<<<< HEAD
+/* <<<<<<< HEAD */
     .test{
       color: red;
     }
@@ -190,7 +190,7 @@ export default {
     background-color: #17A2B8;
     border-color: #17A2B8;
   }
-=======
+/* ======= */
 .test {
     color: red;
 }
@@ -199,5 +199,5 @@ export default {
 .test {
     color: #cccccc;
 }
->>>>>>> 01d111a8b7e9aa78cb7376dd9dcc2442ed1ad3c9
+/* >>>>>>> 01d111a8b7e9aa78cb7376dd9dcc2442ed1ad3c9 */
 </style>
