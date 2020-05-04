@@ -72,13 +72,16 @@ export default {
             return rtn;
         },
         addToCart() {
-            store.dispatch('addToCart', {
-                menuitem_id: this.menuItem.menuitem_id,
-                name: this.menuItem.name,
-                price: this.menuItem.price,
-                qty: this.qty
-            });
-            this.qty = 1;
+            store
+                .dispatch('addToCart', {
+                    menuitem_id: this.menuItem.menuitem_id,
+                    name: this.menuItem.name,
+                    price: this.menuItem.price,
+                    qty: this.qty
+                })
+                .then(() => {
+                    this.qty = 1;
+                });
         }
     }
 };

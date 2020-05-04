@@ -60,7 +60,7 @@ export default {
     margin: 20px auto;
     cursor: pointer;
 }
-.cartIcon:hover {
+.cartIcon:active {
     color: darkgoldenrod;
 }
 </style>

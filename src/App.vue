@@ -107,7 +107,7 @@
                             <font-awesome-icon
                                 icon="shopping-cart"
                                 size="lg"
-                                v-on:click="addToCart()"
+                                v-on:click="gotoCart()"
                             />
                         </div>
                         <div>
@@ -150,6 +150,9 @@ export default {
         },
         goHome() {
             router.push({ name: 'Home' }).catch(err => {});
+        },
+        gotoCart() {
+            router.push({ name: 'Cart' }).catch(err => {});
         },
         gotoMenu(id) {
             router.replace({ path: `/menu/${id}` }).catch(err => {});
