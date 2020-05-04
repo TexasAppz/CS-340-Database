@@ -13,24 +13,27 @@
                 </template>
             </b-table>
             <hr />
-            <div style="text-align:right">
+            <div style="text-align:right" id="cartSummarySection">
                 <div>
                     <span>Sub Total</span>
-                    <span style="padding-left:20px;padding-right:70px"
+                    <span class="cartSummaryItem"
                         >${{ cartSummary.subTotal.toFixed(2) }}</span
                     >
                 </div>
                 <div>
                     <span>Tax</span>
-                    <span style="padding-left:20px;padding-right:70px"
+                    <span class="cartSummaryItem"
                         >${{ cartSummary.tax.toFixed(2) }}</span
                     >
                 </div>
                 <div>
                     <span>Grand Total</span>
-                    <span style="padding-left:20px;padding-right:70px"
+                    <span class="cartSummaryItem"
                         >${{ cartSummary.grandTotal.toFixed(2) }}</span
                     >
+                </div>
+                <div class="cartSummaryItem" style="margin-top:20px">
+                    <b-button variant="primary">Place Order</b-button>
                 </div>
             </div>
         </div>
@@ -81,3 +84,17 @@ export default {
     mounted() {}
 };
 </script>
+
+<style>
+.cartSummaryItem {
+    padding-left: 20px;
+    padding-right: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#cartSummarySection > div {
+    padding-top: 5px;
+    margin-right: 20px;
+}
+</style>
