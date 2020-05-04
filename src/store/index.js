@@ -7,14 +7,28 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        customer: 0,
-        cart: {}
+        customer: null,
+        cart: []
     },
-    getters: {},
-    mutations: {},
+    getters: {
+        numItemsInCart: function(state) {
+            let totalItems = 0;
+            let cart = state.cart;
+            for (let i = 0; i < cart.length; ++i) {
+                totalItems += cart[i].qty;
+            }
+            return totalItems;
+        }
+    },
+    mutations: {
+        addToCart(state, payload) {
+            this.state.cart.push(payload);
+        }
+    },
     actions: {
-        updateCart(context, payload) {
-            console.log(payload);
+        addToCart(context, payload) {
+            context.commit('addToCart', payload);
+            //TODO: Add to the database as well
         }
     },
     modules: {}

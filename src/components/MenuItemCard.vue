@@ -72,11 +72,12 @@ export default {
             return rtn;
         },
         addToCart() {
-            let order_item = {
+            store.dispatch('addToCart', {
                 menuitem_id: this.menuItem.menuitem_id,
+                name: this.menuItem.name,
+                price: this.menuItem.price,
                 qty: this.qty
-            };
-            store.dispatch('updateCart', order_item);
+            });
             this.qty = 1;
         }
     }

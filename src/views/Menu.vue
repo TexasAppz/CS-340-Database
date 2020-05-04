@@ -19,9 +19,19 @@ export default {
             thisMenuId: 0
         };
     },
+    methods: {
+        getMenuItems(id) {
+            this.entireMenu = dataService.getMenu(id);
+            this.thisMenuId = id;
+        }
+    },
     mounted() {
         this.thisMenuId = this.$route.params.id;
-        this.entireMenu = dataService.getMenu(1);
+        this.getMenuItems(this.thisMenuId);
+    },
+    beforeRouteUpdate(to, from, next) {
+        this.getMenuItems(to.params.id);
+        next();
     }
 };
 </script>
