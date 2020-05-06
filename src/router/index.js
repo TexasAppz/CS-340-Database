@@ -5,6 +5,14 @@ import Menu from '../views/Menu.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Cart from '../views/Cart.vue';
+import AdminPortal from '../views/AdminPortal.vue';
+
+import AdminHome from '../views/Admin/Home.vue';
+import AdminOrders from '../views/Admin/Orders.vue';
+import AdminMenus from '../views/Admin/Menus.vue';
+import AdminMenuItems from '../views/Admin/MenuItems.vue';
+import AdminIngredients from '../views/Admin/Ingredients.vue';
+import AdminAccounts from '../views/Admin/Accounts.vue';
 
 Vue.use(VueRouter);
 
@@ -38,6 +46,42 @@ const routes = [
         path: '/Cart',
         name: 'Cart',
         component: Cart
+    },
+    {
+        path: '/Admin',
+        component: AdminPortal,
+        children: [
+            {
+                path: '/',
+                name: 'AdminHome',
+                component: AdminHome
+            },
+            {
+                path: 'Orders',
+                name: 'AdminOrders',
+                component: AdminOrders
+            },
+            {
+                path: 'Menus',
+                name: 'AdminMenus',
+                component: AdminMenus
+            },
+            {
+                path: 'MenuItems',
+                name: 'AdminMenuItems',
+                component: AdminMenuItems
+            },
+            {
+                path: 'Ingredients',
+                name: 'AdminIngredients',
+                component: AdminIngredients
+            },
+            {
+                path: 'Accounts',
+                name: 'AdminAccounts',
+                component: AdminAccounts
+            }
+        ]
     }
 ];
 

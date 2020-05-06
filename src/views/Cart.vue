@@ -3,6 +3,10 @@
         <h1>Cart page</h1>
         <div style="width:800px; margin: 0 auto">
             <b-table striped hover :items="cart" :fields="fields">
+                <template v-slot:cell(remove)="item">
+                    <font-awesome-icon icon="minus-circle" size="lg" />
+                    <span style="display:none">{{ item }}</span>
+                </template>
                 <template v-slot:cell(qty)="item">
                     <b-form-spinbutton
                         v-model="item.item.qty"
@@ -48,6 +52,7 @@ export default {
     data() {
         return {
             fields: [
+                'remove',
                 'name',
                 {
                     key: 'price',

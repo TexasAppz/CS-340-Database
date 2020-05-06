@@ -5,7 +5,7 @@
             type="dark"
             variant="dark"
             class="navBarTextColor"
-            style="margin-bottom: 20px;padding:10px"
+            style="padding:10px"
         >
             <div style="padding-right:20px" class="clickable navBarTextHover">
                 <div>

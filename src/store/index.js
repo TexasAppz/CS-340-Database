@@ -80,13 +80,13 @@ export default new Vuex.Store({
         addToCart(context, payload) {
             //TODO: Add to the database as well
             context.commit('ADD_TO_CART', payload);
-            context.commit('UPDATE_CART_SUMMARY', payload);
+            context.commit('UPDATE_CART_SUMMARY');
         },
         updateCartItem(context, payload) {
             //TODO: Add to the database as well
 
             context.commit('UPDATE_CART_ITEM', payload);
-            context.commit('UPDATE_CART_SUMMARY', payload);
+            context.commit('UPDATE_CART_SUMMARY');
         }
     },
     modules: {}
