@@ -17,6 +17,9 @@ export default new Vuex.Store({
         }
     },
     getters: {
+        customer: function(state) {
+            return state.customer;
+        },
         numItemsInCart: function(state) {
             let totalItems = 0;
             let cart = state.cart;
@@ -74,6 +77,9 @@ export default new Vuex.Store({
             state.cartSummary.tax = state.cartSummary.subTotal * 0.075;
             state.cartSummary.grandTotal =
                 state.cartSummary.subTotal + state.cartSummary.tax;
+        },
+        SET_CURRENT_CUSTOMER(state, payload) {
+            state.customer = payload;
         }
     },
     actions: {
@@ -84,9 +90,11 @@ export default new Vuex.Store({
         },
         updateCartItem(context, payload) {
             //TODO: Add to the database as well
-
             context.commit('UPDATE_CART_ITEM', payload);
             context.commit('UPDATE_CART_SUMMARY');
+        },
+        setCustomer(context, payload) {
+            context.commit('SET_CURRENT_CUSTOMER', payload);
         }
     },
     modules: {}

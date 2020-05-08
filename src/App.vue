@@ -65,7 +65,17 @@
 
                 <div style="text-align:center;margin:auto">
                     <div style="display: inline-block">
-                        <b-navbar-brand href="#">Momma's Place</b-navbar-brand>
+                        <b-navbar-brand href="#">
+                            <span>Momma's Place </span>
+                            <span v-if="isLoggedIn">
+                                <font-awesome-icon
+                                    icon="database"
+                                    size="lg"
+                                    v-on:click="gotoAdminPortal()"
+                                    alt="Menu Page"
+                                />
+                            </span>
+                        </b-navbar-brand>
                     </div>
                 </div>
             </b-collapse>
@@ -73,10 +83,10 @@
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
                 <span style="padding-right:20px;padding-top:15px">
-                    <span v-if="isLoggedIn" @click="doLogout" class="clickable">
+                    <span v-if="isLoggedIn" @click="logout" class="clickable">
                         Logout
                     </span>
-                    <span>
+                    <span v-if="!isLoggedIn">
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Login"
@@ -89,9 +99,6 @@
                             >Register</router-link
                         >
                     </span>
-                    <!--span v-else @click="gotoLogin" class="clickable">
-                                Login
-                            </span-->
                 </span>
 
                 <div
@@ -130,21 +137,15 @@ import router from '@/router/index';
 
 export default {
     name: 'main',
-    data() {
-        return {
-            isLoggedIn: false
-        };
-    },
     computed: {
         numItemsInCart: function() {
             return store.getters.numItemsInCart;
+        },
+        isLoggedIn: function() {
+            return store.getters.customer != null;
         }
     },
     methods: {
-        doLogout() {
-            alert('Logged out...');
-            this.isLoggedIn = !this.isLoggedIn;
-        },
         gotoLogin() {
             router.push({ name: 'Login' }).catch(err => {});
         },
@@ -157,11 +158,19 @@ export default {
         gotoMenu(id) {
             router.replace({ path: `/menu/${id}` }).catch(err => {});
         },
+        gotoAdminPortal() {
+            router.replace({ path: `/Admin/` }).catch(err => {});
+        },
         doSearch() {
             alert(
                 'Searching for... ' +
                     document.getElementById('searchInput').value
             );
+        },
+        logout() {
+            let userCredentials = null;
+            store.dispatch('setCustomer', userCredentials);
+            router.push({ name: 'Home' }).catch(err => {});
         }
     },
     mounted: function() {

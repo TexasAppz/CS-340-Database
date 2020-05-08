@@ -1,3 +1,5 @@
+/*eslint no-unused-vars: "off"*/
+
 function getMenu(menuId) {
     menuId;
     return {
@@ -61,6 +63,16 @@ function getMenu(menuId) {
     };
 }
 
+function login(userCredentials) {
+    userCredentials;
+    return {
+        customer_id: 1,
+        name: 'Bob Smith',
+        email: 'bsmith@noneyabiznes.com'
+    };
+}
+
 module.exports = {
-    getMenu: getMenu
+    getMenu,
+    login
 };

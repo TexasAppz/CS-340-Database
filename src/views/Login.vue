@@ -17,31 +17,32 @@
                 placeholder="Password"
                 required=""
             />
-            <label class="checkbox">
-                <input
-                    type="checkbox"
-                    value="remember-me"
-                    id="rememberMe"
-                    name="rememberMe"
-                />
-                Forgot Password?
-            </label>
-            <button class="btn btn-lg btn-primary2 btn-block" type="submit">
+            <button
+                class="btn btn-lg btn-primary2 btn-block"
+                type="submit"
+                @click="login($event)"
+            >
                 Login
             </button>
         </form>
     </div>
 </template>
 <script>
+/*eslint no-unused-vars: "off"*/
+
+import store from '@/store/index';
+import router from '@/router/index';
+import dataService from '../store/dataService';
+
 export default {
     name: 'Login',
     data() {
         return {
             form: {
-                email: '',
-                name: '',
-                food: null,
-                checked: []
+                username: '',
+                password: '',
+                rememberme: '',
+                errors: []
             },
             foods: [
                 { text: 'Select One', value: null },
@@ -52,6 +53,29 @@ export default {
             ],
             show: true
         };
+    },
+    methods: {
+        login(e) {
+            event.preventDefault();
+            if (this.formIsValid()) {
+                let userCredentials = {
+                    username: this.username,
+                    password: this.password
+                };
+
+                let logincheck = dataService.login(userCredentials);
+
+                if (logincheck.customer_id != undefined) {
+                    store.dispatch('setCustomer', userCredentials);
+                    router.push({ name: 'Home' }).catch(err => {});
+                } else {
+                    this.errors.push(logincheck);
+                }
+            }
+        },
+        formIsValid() {
+            return true;
+        }
     }
 };
 </script>
