@@ -31,6 +31,12 @@
                     </span>
                 </li>
                 <li>
+                    <router-link to="/Admin">Admin Home Page</router-link>
+                    <span>
+                        This page is for Admin
+                    </span>
+                </li>
+                <li>
                     <router-link to="/Register">Cart Page</router-link>
                     <span>
                         This page is for customers to register to place orders
