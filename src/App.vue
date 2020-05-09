@@ -90,13 +90,19 @@
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Login"
-                            >Login</router-link
+                            >Returning Customer</router-link
                         >
                         |
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Register"
-                            >Register</router-link
+                            >Register Here</router-link
+                        >
+                        |
+                        <router-link
+                            class="navBarTextColor navBarTextHover"
+                            to="/Admin"
+                            >Administrator</router-link
                         >
                     </span>
                 </span>

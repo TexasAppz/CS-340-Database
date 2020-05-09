@@ -48,6 +48,7 @@
                 </small>
             </p>
         </div>
+        <br>
         <span></span>
 
         <div class="second">
@@ -59,7 +60,7 @@
                 >
             </p>
         </div>
-
+        <br>
         <div class="dessert">
             <p>
                 Grilled Stone Fruit Parfait<span class="price">$8</span><br />
