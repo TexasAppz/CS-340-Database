@@ -123,9 +123,98 @@ function getMenus() {
     };
 }
 
+function getMenuItems() {
+    return {
+        menuItems: [
+            { menu_item_id: 1, name: 'Pankakes' },
+            { menu_item_id: 2, name: 'Eggs Benedict' },
+            { menu_item_id: 3, name: 'Waffles' },
+            { menu_item_id: 4, name: 'Grilled Chicken Sandwich' },
+            { menu_item_id: 5, name: 'Bacon Cheeseburger' },
+            { menu_item_id: 6, name: 'Peanut Butter and Jelly Sandwich' },
+            { menu_item_id: 7, name: 'Steak and Lobster' },
+            { menu_item_id: 8, name: 'Spaghetti with Meatballs' },
+            { menu_item_id: 9, name: 'Taco Salad' }
+        ]
+    };
+}
+
+function getIngredients() {
+    return {
+        ingredients: [
+            { ingredient_id: 1, name: 'Buttermilk pancakes' },
+            { ingredient_id: 2, name: 'Bacon' },
+            { ingredient_id: 3, name: 'Eggs' },
+            { ingredient_id: 4, name: 'Ham' },
+            { ingredient_id: 5, name: 'Hollandaise Sauce' },
+            { ingredient_id: 6, name: 'English Muffin' },
+            { ingredient_id: 7, name: 'Golden Waffles' },
+            { ingredient_id: 8, name: 'Kaiser Roll' },
+            { ingredient_id: 9, name: 'Grilled Chicken' },
+            { ingredient_id: 10, name: 'Lettuce' },
+            { ingredient_id: 11, name: 'Tomato' },
+            { ingredient_id: 12, name: 'Onion' },
+            { ingredient_id: 13, name: 'Peanut Butter' },
+            { ingredient_id: 14, name: 'Grape Jelly' },
+            { ingredient_id: 15, name: 'Quarter Pound Beef Patty' },
+            { ingredient_id: 16, name: 'French Fries' },
+            { ingredient_id: 17, name: 'Fruit Cup' },
+            { ingredient_id: 18, name: 'Rib Eye Steak' },
+            { ingredient_id: 19, name: 'Lobster Tail' },
+            { ingredient_id: 20, name: 'Rice Pilaf' },
+            { ingredient_id: 21, name: 'House Salad' },
+            { ingredient_id: 22, name: 'Spaghetti' },
+            { ingredient_id: 23, name: 'Italian Meatballs' },
+            { ingredient_id: 24, name: 'Tomato Sauce' },
+            { ingredient_id: 25, name: 'Taco seasoned beef' },
+            { ingredient_id: 26, name: 'Salsa' },
+            { ingredient_id: 27, name: 'Shredded Cheese' },
+            { ingredient_id: 28, name: 'Sour Cream' },
+            { ingredient_id: 29, name: 'Guacamole' },
+            { ingredient_id: 30, name: 'Cheddar Cheese' }
+        ]
+    };
+}
+
+function getMenuItemIngredients(menu_item_id) {
+    menu_item_id;
+    return {
+        ingredients: [
+            { ingredient_id: 1, name: 'Buttermilk pancakes' },
+            { ingredient_id: 2, name: 'Bacon' },
+            { ingredient_id: 3, name: 'Eggs' }
+        ]
+    };
+}
+
+function getAccounts() {
+    return {
+        accounts: [
+            {
+                account_id: 1,
+                name: 'Bob Smith',
+                email: 'bsmith@cs340.com'
+            },
+            {
+                account_id: 2,
+                name: 'Kathy Jones',
+                email: 'kjones@cs340.com'
+            },
+            {
+                account_id: 3,
+                name: 'Roger Allens',
+                email: 'rallens@cs340.com'
+            }
+        ]
+    };
+}
 module.exports = {
     getMenu,
     login,
     getOpenOrders,
-    getMenus
+    getMenus,
+    getMenuItems,
+    getIngredients,
+    getMenuItemIngredients,
+    getAccounts
 };
