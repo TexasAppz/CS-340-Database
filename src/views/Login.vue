@@ -10,6 +10,7 @@
                 required=""
                 autofocus=""
             />
+            <br>
             <input
                 type="password"
                 class="form-control"
