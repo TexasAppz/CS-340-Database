@@ -126,15 +126,69 @@ function getMenus() {
 function getMenuItems() {
     return {
         menuItems: [
-            { menu_item_id: 1, name: 'Pankakes' },
-            { menu_item_id: 2, name: 'Eggs Benedict' },
-            { menu_item_id: 3, name: 'Waffles' },
-            { menu_item_id: 4, name: 'Grilled Chicken Sandwich' },
-            { menu_item_id: 5, name: 'Bacon Cheeseburger' },
-            { menu_item_id: 6, name: 'Peanut Butter and Jelly Sandwich' },
-            { menu_item_id: 7, name: 'Steak and Lobster' },
-            { menu_item_id: 8, name: 'Spaghetti with Meatballs' },
-            { menu_item_id: 9, name: 'Taco Salad' }
+            {
+                name: 'Pankakes',
+                price: 10.95,
+                menu_id: 1,
+                menu_name: 'Breakfast',
+                menu_item_id: 1
+            },
+            {
+                name: 'Eggs Benedict',
+                price: 12.95,
+                menu_id: 1,
+                menu_name: 'Breakfast',
+                menu_item_id: 2
+            },
+            {
+                name: 'Waffles',
+                price: 9.95,
+                menu_id: 1,
+                menu_name: 'Breakfast',
+                menu_item_id: 3
+            },
+            {
+                name: 'Grilled Chicken Sandwich',
+                price: 12.95,
+                menu_id: 2,
+                menu_name: 'Lunch',
+                menu_item_id: 4
+            },
+            {
+                name: 'Bacon Cheeseburger',
+                price: 14.95,
+                menu_id: 2,
+                menu_name: 'Lunch',
+                menu_item_id: 5
+            },
+            {
+                name: 'Peanut Butter and Jelly Sandwich',
+                price: 5.95,
+                menu_id: 2,
+                menu_name: 'Lunch',
+                menu_item_id: 6
+            },
+            {
+                name: 'Steak and Lobster',
+                price: 24.95,
+                menu_id: 3,
+                menu_name: 'Dinner',
+                menu_item_id: 7
+            },
+            {
+                name: 'Spaghetti with Meatballs',
+                price: 14.95,
+                menu_id: 3,
+                menu_name: 'Dinner',
+                menu_item_id: 8
+            },
+            {
+                name: 'Taco Salad',
+                price: 10.95,
+                menu_id: 3,
+                menu_name: 'Dinner',
+                menu_item_id: 9
+            }
         ]
     };
 }

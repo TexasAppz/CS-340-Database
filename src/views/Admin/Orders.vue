@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{ name }}</h1>
-        <div style="width:800px; margin-left:50px;margin-top:40px">
+        <div style="width:90%; margin-left:50px;margin-top:40px">
             <div>
                 <span style="float:right;margin-right:40px;padding-bottom:10px">
                     <font-awesome-icon

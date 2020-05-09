@@ -1,13 +1,14 @@
 <template>
     <div>
         <h1>{{ name }}</h1>
-        <div style="width:600px; margin-left:50px;margin-top:40px">
+        <div style="width:90%; margin-left:50px;margin-top:40px">
             <div>
                 <span style="float:right;margin-right:40px;padding-bottom:10px">
                     <font-awesome-icon
                         icon="plus-circle"
                         size="lg"
                         style="color:green"
+                        v-b-modal.modal-2
                     />
                     <span> Add New</span>
                 </span>
@@ -62,7 +63,7 @@
             ></b-pagination>
         </div>
         <div>
-            <b-button v-b-modal.modal-1>View Edit Form</b-button>
+            <b-button v-b-modal.modal-1>Mock Edit Form</b-button>
             <b-modal id="modal-1" title="Edit Ingredient">
                 <b-form>
                     <b-form-input
@@ -70,6 +71,17 @@
                         type="text"
                         required
                         placeholder="Buttermilk pancakes"
+                    ></b-form-input
+                ></b-form>
+            </b-modal>
+        </div>
+        <div>
+            <b-modal id="modal-2" title="Add New Ingredient">
+                <b-form>
+                    <b-form-input
+                        id="input-1"
+                        type="text"
+                        required
                     ></b-form-input
                 ></b-form>
             </b-modal>

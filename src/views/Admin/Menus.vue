@@ -1,13 +1,14 @@
 <template>
     <div>
         <h1>{{ name }}</h1>
-        <div style="width:400px; margin-left:50px;margin-top:40px">
+        <div style="width:90%; margin-left:50px;margin-top:40px">
             <div>
                 <span style="float:right;margin-right:40px;padding-bottom:10px">
                     <font-awesome-icon
                         icon="plus-circle"
                         size="lg"
                         style="color:green"
+                        v-b-modal.modal-1
                     />
                     <span> Add New</span>
                 </span>
@@ -38,15 +39,12 @@
             </b-table>
         </div>
         <div>
-            <b-button v-b-modal.modal-1>Example Edit Form</b-button>
-
-            <b-modal id="modal-1" title="Edit Menu Name">
+            <b-modal id="modal-1" title="New Menu Name">
                 <b-form>
                     <b-form-input
                         id="input-1"
                         type="text"
                         required
-                        placeholder="Breakfast"
                     ></b-form-input
                 ></b-form>
             </b-modal>
