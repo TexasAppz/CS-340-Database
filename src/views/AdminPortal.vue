@@ -2,15 +2,26 @@
     <!-- https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_sidenav_fixed -->
     <div>
         <div class="sidenav">
-            <router-link :to="{ name: 'AdminOrders' }">Orders</router-link>
-            <router-link :to="{ name: 'AdminMenus' }">Menus</router-link>
-            <router-link :to="{ name: 'AdminMenuItems' }"
-                >Menu Items</router-link
-            >
-            <router-link :to="{ name: 'AdminIngredients' }"
-                >Ingredients</router-link
-            >
-            <router-link :to="{ name: 'AdminAccounts' }">Accounts</router-link>
+            <router-link :to="{ name: 'AdminOrders' }">
+                <font-awesome-icon icon="shopping-cart" size="lg" />
+                Orders
+            </router-link>
+            <router-link :to="{ name: 'AdminMenus' }">
+                <font-awesome-icon icon="list-alt" size="lg" />
+                Menus
+            </router-link>
+            <router-link :to="{ name: 'AdminMenuItems' }">
+                <font-awesome-icon icon="list-ul" size="lg" />
+                Menu Items
+            </router-link>
+            <router-link :to="{ name: 'AdminIngredients' }">
+                <font-awesome-icon icon="check-square" size="lg" />
+                Ingredients
+            </router-link>
+            <router-link :to="{ name: 'AdminAccounts' }">
+                <font-awesome-icon icon="users" size="lg" />
+                Accounts
+            </router-link>
         </div>
         <div class="main">
             <router-view />
@@ -21,7 +32,7 @@
 <style>
 .sidenav {
     height: 100%;
-    width: 150px;
+    width: 180px;
     position: fixed;
     z-index: 1;
     top: 84;
@@ -32,7 +43,8 @@
 }
 
 .sidenav a {
-    padding: 6px 8px 16px 16px;
+    padding: 6px 8px 20px 16px;
+    margin-top: 20px;
     text-decoration: none;
     font-size: 18px;
     color: #818181;
@@ -41,10 +53,11 @@
 
 .sidenav a:hover {
     color: #f1f1f1;
+    text-decoration: none;
 }
 
 .main {
-    margin-left: 160px; /* Same as the width of the sidenav */
+    margin-left: 200px; /* Same as the width of the sidenav */
     padding: 0px 10px;
     padding-top: 20px;
     text-align: left;
