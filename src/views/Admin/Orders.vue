@@ -41,8 +41,10 @@
 </template>
 
 <script>
+/*eslint no-unused-vars: "off"*/
+
 // import store from '@/store/index';
-// import router from '@/router/index';
+import router from '@/router/index';
 import dataService from '../../store/dataService';
 
 export default {
@@ -69,7 +71,10 @@ export default {
             console.log(item);
         },
         editItem(item) {
-            console.log(item);
+            //console.log(item);
+            router
+                .replace({ path: `/Admin/OrderDetails/${item.order_id}` })
+                .catch(err => {});
         }
     }
 };

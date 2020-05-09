@@ -12,7 +12,24 @@
                     <span> Add New</span>
                 </span>
             </div>
-            <b-table striped hover :items="data.ingredients" :fields="fields">
+            <div>
+                Sorting By: <b>{{ sortBy }}</b
+                >, Sort Direction:
+                <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
+            </div>
+            <b-table
+                striped
+                hover
+                :items="data.ingredients"
+                :fields="fields"
+                :per-page="perPage"
+                :current-page="currentPage"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                responsive="sm"
+                sort-icon-left
+                id="my-table"
+            >
                 <template v-slot:cell(Delete)="item">
                     <div>
                         <span
@@ -36,6 +53,13 @@
                     </div>
                 </template>
             </b-table>
+            <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                aria-controls="my-table"
+                style="float:right"
+            ></b-pagination>
         </div>
         <div>
             <b-button v-b-modal.modal-1>View Edit Form</b-button>
@@ -65,14 +89,21 @@ export default {
             name: 'Ingredients',
             fields: [
                 'Edit',
-                { key: 'name', label: 'Ingredient Name' },
+                { key: 'name', label: 'Ingredient Name', sortable: true },
                 'Delete'
-            ]
+            ],
+            perPage: 10,
+            currentPage: 1,
+            sortBy: 'name',
+            sortDesc: false
         };
     },
     computed: {
         data: function() {
             return dataService.getIngredients();
+        },
+        rows() {
+            return this.data.ingredients.length;
         }
     },
     methods: {

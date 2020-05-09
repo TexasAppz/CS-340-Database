@@ -39,7 +39,7 @@
         </div>
         <div>
             <b-button v-b-modal.modal-1 @click="getMenuItemIngredients()">
-                Edit Form</b-button
+                Example Edit Form</b-button
             >
             <b-modal id="modal-1" title="Edit Menu Item Name">
                 <b-form>

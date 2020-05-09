@@ -38,7 +38,7 @@
             </b-table>
         </div>
         <div>
-            <b-button v-b-modal.modal-1>View Edit Form</b-button>
+            <b-button v-b-modal.modal-1>Example Edit Form</b-button>
 
             <b-modal id="modal-1" title="Edit Menu Name">
                 <b-form>

@@ -9,6 +9,7 @@ import AdminPortal from '../views/AdminPortal.vue';
 
 import AdminHome from '../views/Admin/Home.vue';
 import AdminOrders from '../views/Admin/Orders.vue';
+import AdminOrderDetails from '../views/Admin/OrderDetails.vue';
 import AdminMenus from '../views/Admin/Menus.vue';
 import AdminMenuItems from '../views/Admin/MenuItems.vue';
 import AdminIngredients from '../views/Admin/Ingredients.vue';
@@ -60,6 +61,11 @@ const routes = [
                 path: 'Orders',
                 name: 'AdminOrders',
                 component: AdminOrders
+            },
+            {
+                path: 'OrderDetails/:id',
+                name: 'AdminOrderDetails',
+                component: AdminOrderDetails
             },
             {
                 path: 'Menus',
