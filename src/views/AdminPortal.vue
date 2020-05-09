@@ -47,6 +47,7 @@
     margin-left: 160px; /* Same as the width of the sidenav */
     padding: 0px 10px;
     padding-top: 20px;
+    text-align: left;
 }
 
 @media screen and (max-height: 450px) {

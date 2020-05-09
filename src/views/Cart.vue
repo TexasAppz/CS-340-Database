@@ -56,7 +56,7 @@ export default {
                 'name',
                 {
                     key: 'price',
-                    lable: 'Price',
+                    label: 'Price',
                     formatter: (value, key, item) => {
                         return `$` + (item.price * 1).toFixed(2);
                     }
@@ -64,7 +64,7 @@ export default {
                 'qty',
                 {
                     key: 'extPrice',
-                    lable: 'Ext Price',
+                    label: 'Ext Price',
                     formatter: (value, key, item) => {
                         return `$` + (item.price * item.qty).toFixed(2);
                     }

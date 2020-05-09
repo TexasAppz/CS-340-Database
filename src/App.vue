@@ -159,7 +159,7 @@ export default {
             router.replace({ path: `/menu/${id}` }).catch(err => {});
         },
         gotoAdminPortal() {
-            router.replace({ path: `/Admin/` }).catch(err => {});
+            router.replace({ path: `/Admin/Orders` }).catch(err => {});
         },
         doSearch() {
             alert(

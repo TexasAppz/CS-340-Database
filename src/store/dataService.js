@@ -72,7 +72,60 @@ function login(userCredentials) {
     };
 }
 
+function getOpenOrders() {
+    return {
+        orders: [
+            {
+                order_id: 1,
+                customerName: 'Bob',
+                orderStatus: 'Ready'
+            },
+            {
+                order_id: 2,
+                customerName: 'John',
+                orderStatus: 'Ready'
+            },
+            {
+                order_id: 3,
+                customerName: 'May',
+                orderStatus: 'New'
+            },
+            {
+                order_id: 4,
+                customerName: 'Kathy',
+                orderStatus: 'New'
+            },
+            {
+                order_id: 5,
+                customerName: 'Brent',
+                orderStatus: 'New'
+            }
+        ]
+    };
+}
+
+function getMenus() {
+    return {
+        menus: [
+            {
+                menu_id: 1,
+                name: 'Breakfast'
+            },
+            {
+                menu_id: 2,
+                name: 'Lunch'
+            },
+            {
+                menu_id: 3,
+                name: 'Dinner'
+            }
+        ]
+    };
+}
+
 module.exports = {
     getMenu,
-    login
+    login,
+    getOpenOrders,
+    getMenus
 };

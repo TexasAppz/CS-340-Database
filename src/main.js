@@ -10,7 +10,9 @@ import {
     faHome,
     faUtensils,
     faMinusCircle,
-    faDatabase
+    faDatabase,
+    faEdit,
+    faPlusCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -23,6 +25,8 @@ library.add(faHome);
 library.add(faUtensils);
 library.add(faMinusCircle);
 library.add(faDatabase);
+library.add(faEdit);
+library.add(faPlusCircle);
 
 Vue.use(BootstrapVue);
 
