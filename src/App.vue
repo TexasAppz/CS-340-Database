@@ -8,7 +8,7 @@
             style="padding:10px"
         >
             <div style="padding-right:20px" class="clickable navBarTextHover">
-                <div>
+                <div style="text-align: center;">
                     <font-awesome-icon
                         icon="home"
                         size="lg"
@@ -21,7 +21,7 @@
                 style="padding-right:20px;display: inline-block"
                 class="clickable navBarTextHover"
             >
-                <div>
+                <div style="text-align: center;">
                     <font-awesome-icon
                         icon="utensils"
                         size="lg"
@@ -55,7 +55,7 @@
                     <b-form-input
                         size="sm"
                         class="mr-sm-2"
-                        placeholder="Search"
+                        placeholder="Search Menus"
                         id="searchInput"
                     ></b-form-input>
                     <b-button size="sm" class="my-2 my-sm-0" @click="doSearch"

@@ -1,6 +1,9 @@
 <template>
     <div id="menu">
-        <h1>{{ entireMenu.name }} Menu Page {{ thisMenuId }}</h1>
+        <div style="text-align:center;margin:10px">
+            <h1>{{ entireMenu.name }} Menu Page {{ thisMenuId }}</h1>
+        </div>
+
         <div style="width:800px; margin: 0 auto">
             <div v-for="item in entireMenu.items" :key="item.menu_item_id">
                 <menu-item-card v-bind:menu-item="item"></menu-item-card>
