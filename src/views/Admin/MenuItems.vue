@@ -47,7 +47,7 @@
                         type="text"
                         placeholder="Name"
                         style="margin:8px;"
-                        :value="selectedMenuItem.name"
+                        :value="selectedItem.name"
                         required
                     >
                     </b-form-input>
@@ -57,24 +57,44 @@
                         style="margin:8px;"
                         placeholder="1.00"
                         step="0.01"
-                        min="0"
-                        max="50"
-                        :value="selectedMenuItem.price"
+                        min="1"
+                        max="25"
+                        :value="selectedItem.price"
                         required
                     >
                     </b-form-input>
                     <fieldset style="margin-left:20px;">
                         <legend>On Menu</legend>
-                        <input type="radio" value="1" />
+                        <input
+                            type="radio"
+                            name="menu_id"
+                            value="1"
+                            v-model="selectedItem.menu_id"
+                        />
                         <label for="one">Breakfast</label>
                         <br />
-                        <input type="radio" value="2" />
+                        <input
+                            type="radio"
+                            name="menu_id"
+                            value="2"
+                            v-model="selectedItem.menu_id"
+                        />
                         <label for="two">Lunch</label>
                         <br />
-                        <input type="radio" value="3" />
+                        <input
+                            type="radio"
+                            name="menu_id"
+                            value="3"
+                            v-model="selectedItem.menu_id"
+                        />
                         <label for="two">Dinner</label>
                         <br />
-                        <input type="radio" value="" />
+                        <input
+                            type="radio"
+                            name="menu_id"
+                            value=""
+                            v-model="selectedItem.menu_id"
+                        />
                         <label for="two">None</label>
                     </fieldset>
                 </b-form>
@@ -84,7 +104,7 @@
 </template>
 
 <script>
-// import store from '@/store/index';
+//import store from '@/store/index';
 // import router from '@/router/index';
 import dataService from '../../store/dataService';
 
@@ -92,7 +112,7 @@ export default {
     data() {
         //view model
         return {
-            selectedMenuItem: {},
+            selectedItem: {},
             name: 'Menu Item',
             fields: [
                 'Edit',
@@ -126,15 +146,14 @@ export default {
     },
     methods: {
         deleteItem(item) {
-            //console.log(item);
             alert(item.name + ' would be deleted.');
         },
         editItem(item) {
-            this.selectedMenuItem = item;
+            this.selectedItem = item;
             this.$bvModal.show('modalForm1');
         },
         showModalForm() {
-            this.selectedMenuItem = {};
+            this.selectedItem = {};
             this.$bvModal.show('modalForm1');
         }
     }

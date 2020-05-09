@@ -3,11 +3,14 @@
         <h1>{{ name }}</h1>
         <div style="width:90%; margin-left:50px;margin-top:40px">
             <div>
-                <span style="float:right;margin-right:40px;padding-bottom:10px">
+                <span
+                    style="float:right;margin-right:40px;padding-bottom:10px;cursor:pointer"
+                >
                     <font-awesome-icon
                         icon="plus-circle"
                         size="lg"
                         style="color:green"
+                        v-b-modal.modal-1
                     />
                     <span> Add New</span>
                 </span>
@@ -36,6 +39,19 @@
                     </div>
                 </template>
             </b-table>
+        </div>
+        <div>
+            <b-modal id="modal-1" title="New Order Form">
+                <b-form>
+                    <span>Customer Name</span>
+                    <b-form-input
+                        id="input-1"
+                        type="text"
+                        placeholder="this will be a dropdown menu of customers"
+                        required
+                    ></b-form-input
+                ></b-form>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -68,6 +84,7 @@ export default {
     },
     methods: {
         deleteItem(item) {
+            alert('Order number ' + item.order_id + ' would be deleted');
             console.log(item);
         },
         editItem(item) {

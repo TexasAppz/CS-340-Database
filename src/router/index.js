@@ -15,6 +15,8 @@ import AdminMenuItems from '../views/Admin/MenuItems.vue';
 import AdminIngredients from '../views/Admin/Ingredients.vue';
 import AdminAccounts from '../views/Admin/Accounts.vue';
 
+import store from '@/store/index';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -95,6 +97,15 @@ const router = new VueRouter({
     //mode: 'history',
     base: process.env.BASE_URL,
     routes
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.matched[0].path === '/Admin') {
+        store.dispatch('setShowCartIcon', false);
+    } else {
+        store.dispatch('setShowCartIcon', true);
+    }
+    next();
 });
 
 export default router;

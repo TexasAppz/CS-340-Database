@@ -9,14 +9,16 @@
                 placeholder="Email Address"
                 required=""
                 autofocus=""
+                :value="username"
             />
-            <br>
+            <br />
             <input
                 type="password"
                 class="form-control"
                 name="password"
                 placeholder="Password"
                 required=""
+                :value="password"
             />
             <button
                 class="btn btn-lg btn-primary2 btn-block"
@@ -39,20 +41,10 @@ export default {
     name: 'Login',
     data() {
         return {
-            form: {
-                username: '',
-                password: '',
-                rememberme: '',
-                errors: []
-            },
-            foods: [
-                { text: 'Select One', value: null },
-                'Carrots',
-                'Beans',
-                'Tomatoes',
-                'Corn'
-            ],
-            show: true
+            username: '',
+            password: '',
+            rememberme: '',
+            errors: []
         };
     },
     methods: {

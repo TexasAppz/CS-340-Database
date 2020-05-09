@@ -3,11 +3,14 @@
         <h1>{{ name }}</h1>
         <div style="width:600px; margin-left:50px;margin-top:40px">
             <div>
-                <span style="float:right;margin-right:40px;padding-bottom:10px">
+                <span
+                    style="float:right;margin-right:40px;padding-bottom:10px;cursor:pointer"
+                >
                     <font-awesome-icon
                         icon="plus-circle"
                         size="lg"
                         style="color:green"
+                        @click="showModalForm()"
                     />
                     <span> Add New</span>
                 </span>
@@ -37,6 +40,26 @@
                 </template>
             </b-table>
         </div>
+        <b-modal id="modalForm1" :title="formTitle">
+            <b-form>
+                <b-form-input
+                    id="name"
+                    type="text"
+                    required
+                    v-model="selectedItem.name"
+                    placeholder="Name"
+                    style="margin:8px;"
+                ></b-form-input>
+                <b-form-input
+                    id="email"
+                    type="text"
+                    required
+                    v-model="selectedItem.email"
+                    placeholder="Email"
+                    style="margin:8px;"
+                ></b-form-input>
+            </b-form>
+        </b-modal>
     </div>
 </template>
 
@@ -49,6 +72,8 @@ export default {
     data() {
         //view model
         return {
+            selectedItem: {},
+            formTitle: '',
             name: 'Account Profiles',
             fields: [
                 'Edit',
@@ -65,10 +90,17 @@ export default {
     },
     methods: {
         deleteItem(item) {
-            console.log(item);
+            alert(item.name + ' would be deleted');
         },
         editItem(item) {
-            console.log(item);
+            this.selectedItem = item;
+            this.formTitle = 'Edit Account Info';
+            this.$bvModal.show('modalForm1');
+        },
+        showModalForm() {
+            this.selectedItem = {};
+            this.formTitle = 'Add New Account';
+            this.$bvModal.show('modalForm1');
         }
     }
 };

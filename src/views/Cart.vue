@@ -1,11 +1,20 @@
 <template>
     <div>
-        <h1>Cart page</h1>
+        <div style="text-align:center;padding:20px">
+            <h1>{{ name }}</h1>
+        </div>
+
         <div style="width:800px; margin: 0 auto">
             <b-table striped hover :items="cart" :fields="fields">
                 <template v-slot:cell(remove)="item">
-                    <font-awesome-icon icon="minus-circle" size="lg" />
-                    <span style="display:none">{{ item }}</span>
+                    <div>
+                        <span
+                            class="actionIcon deleteIcon"
+                            @click="deleteItem(item.item)"
+                        >
+                            <font-awesome-icon icon="minus-circle" size="lg" />
+                        </span>
+                    </div>
                 </template>
                 <template v-slot:cell(qty)="item">
                     <b-form-spinbutton
@@ -48,9 +57,9 @@
 import store from '@/store/index';
 
 export default {
-    name: 'Cart',
     data() {
         return {
+            name: 'My Cart',
             fields: [
                 'remove',
                 'name',
@@ -72,7 +81,6 @@ export default {
             ]
         };
     },
-    components: {},
     computed: {
         cart: function() {
             return store.getters.currentCart;
@@ -84,9 +92,11 @@ export default {
     methods: {
         updateItem(item) {
             store.dispatch('updateCartItem', item);
+        },
+        deleteItem(item) {
+            store.dispatch('removeFromCart', item);
         }
-    },
-    mounted() {}
+    }
 };
 </script>
 

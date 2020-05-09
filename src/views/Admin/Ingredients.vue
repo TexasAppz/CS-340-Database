@@ -3,12 +3,14 @@
         <h1>{{ name }}</h1>
         <div style="width:90%; margin-left:50px;margin-top:40px">
             <div>
-                <span style="float:right;margin-right:40px;padding-bottom:10px">
+                <span
+                    style="float:right;margin-right:40px;padding-bottom:10px;cursor:pointer"
+                >
                     <font-awesome-icon
                         icon="plus-circle"
                         size="lg"
                         style="color:green"
-                        v-b-modal.modal-2
+                        @click="showModalForm()"
                     />
                     <span> Add New</span>
                 </span>
@@ -63,25 +65,13 @@
             ></b-pagination>
         </div>
         <div>
-            <b-button v-b-modal.modal-1>Mock Edit Form</b-button>
-            <b-modal id="modal-1" title="Edit Ingredient">
+            <b-modal id="modalForm1" :title="formTitle">
                 <b-form>
                     <b-form-input
                         id="input-1"
                         type="text"
                         required
-                        placeholder="Buttermilk pancakes"
-                    ></b-form-input
-                ></b-form>
-            </b-modal>
-        </div>
-        <div>
-            <b-modal id="modal-2" title="Add New Ingredient">
-                <b-form>
-                    <b-form-input
-                        id="input-1"
-                        type="text"
-                        required
+                        v-model="selectedItem.name"
                     ></b-form-input
                 ></b-form>
             </b-modal>
@@ -98,6 +88,8 @@ export default {
     data() {
         //view model
         return {
+            selectedItem: {},
+            formTitle: '',
             name: 'Ingredients',
             fields: [
                 'Edit',
@@ -120,10 +112,17 @@ export default {
     },
     methods: {
         deleteItem(item) {
-            console.log(item);
+            alert(item.name + ' would be deleted');
         },
         editItem(item) {
-            console.log(item);
+            this.selectedItem = item;
+            this.formTitle = 'Edit Ingredient Name';
+            this.$bvModal.show('modalForm1');
+        },
+        showModalForm() {
+            this.selectedItem = {};
+            this.formTitle = 'Add New Ingredient';
+            this.$bvModal.show('modalForm1');
         }
     }
 };

@@ -262,6 +262,27 @@ function getAccounts() {
         ]
     };
 }
+
+function getOrder(id) {
+    return {
+        order_id: id,
+        customer: {
+            customer_id: 1,
+            name: 'Bob Smith',
+            email: 'bsmith@cs340.com'
+        },
+        order_items: [
+            { menuitem_id: '1', name: 'Pancakes', price: '10.95', qty: 1 },
+            { menuitem_id: '2', name: 'Eggs Benedict', price: '12.95', qty: 1 },
+            { menuitem_id: '3', name: 'Waffles', price: '9.95', qty: 2 }
+        ],
+        sub_total: '43.80',
+        tax: '3.28',
+        total: '47.08',
+        status: 'Ready For Pickup'
+    };
+}
+
 module.exports = {
     getMenu,
     login,
@@ -270,5 +291,6 @@ module.exports = {
     getMenuItems,
     getIngredients,
     getMenuItemIngredients,
-    getAccounts
+    getAccounts,
+    getOrder
 };

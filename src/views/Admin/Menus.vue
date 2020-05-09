@@ -7,8 +7,8 @@
                     <font-awesome-icon
                         icon="plus-circle"
                         size="lg"
-                        style="color:green"
-                        v-b-modal.modal-1
+                        style="color:green;cursor:pointer"
+                        @click="showModalForm()"
                     />
                     <span> Add New</span>
                 </span>
@@ -39,12 +39,13 @@
             </b-table>
         </div>
         <div>
-            <b-modal id="modal-1" title="New Menu Name">
+            <b-modal id="modalForm1" :title="formTitle">
                 <b-form>
                     <b-form-input
                         id="input-1"
                         type="text"
                         required
+                        v-model="selectedItem.name"
                     ></b-form-input
                 ></b-form>
             </b-modal>
@@ -61,6 +62,8 @@ export default {
     data() {
         //view model
         return {
+            selectedItem: {},
+            formTitle: '',
             name: 'Menus',
             fields: ['Edit', { key: 'name', label: 'Menu Name' }, 'Delete']
         };
@@ -72,10 +75,17 @@ export default {
     },
     methods: {
         deleteItem(item) {
-            console.log(item);
+            alert(item.name + ' would be deleted');
         },
         editItem(item) {
-            console.log(item);
+            this.selectedItem = item;
+            this.formTitle = 'Edit Menu Name';
+            this.$bvModal.show('modalForm1');
+        },
+        showModalForm() {
+            this.selectedItem = {};
+            this.formTitle = 'Add New Menu';
+            this.$bvModal.show('modalForm1');
         }
     }
 };

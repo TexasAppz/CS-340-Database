@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div>
         <b-navbar
             toggleable="lg"
             type="dark"
@@ -67,14 +67,6 @@
                     <div style="display: inline-block">
                         <b-navbar-brand href="#">
                             <span>Momma's Place </span>
-                            <span v-if="isLoggedIn">
-                                <font-awesome-icon
-                                    icon="database"
-                                    size="lg"
-                                    v-on:click="gotoAdminPortal()"
-                                    alt="Menu Page"
-                                />
-                            </span>
                         </b-navbar-brand>
                     </div>
                 </div>
@@ -83,26 +75,28 @@
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
                 <span style="padding-right:20px;padding-top:15px">
-                    <span v-if="isLoggedIn" @click="logout" class="clickable">
+                    <span v-show="isLoggedIn" @click="logout" class="clickable">
                         Logout
                     </span>
                     <span v-if="!isLoggedIn">
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Login"
-                            >Returning Customer</router-link
+                            >Login</router-link
                         >
                         |
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Register"
-                            >Register Here</router-link
+                            >Register</router-link
                         >
+                    </span>
+                    <span>
                         |
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Admin"
-                            >Administrator</router-link
+                            >Admin Portal</router-link
                         >
                     </span>
                 </span>
@@ -111,6 +105,7 @@
                     id="cartIconWithTotalItems"
                     class="clickable navBarTextHover"
                     style="padding-right: 20px"
+                    v-show="showCartIcon"
                 >
                     <div
                         class="p1 fa-stack has-badge"
@@ -139,16 +134,24 @@
 /*eslint no-unused-vars: "off"*/
 
 import store from '@/store/index';
+import { mapState } from 'vuex';
 import router from '@/router/index';
 
 export default {
-    name: 'main',
+    //name: 'main',
     computed: {
-        numItemsInCart: function() {
+        numItemsInCart() {
             return store.getters.numItemsInCart;
         },
-        isLoggedIn: function() {
-            return store.getters.customer != null;
+        isLoggedIn: {
+            get: function() {
+                return store.getters['customer'] != null;
+            }
+        },
+        showCartIcon: {
+            get: function() {
+                return store.getters['showCartIcon'];
+            }
         }
     },
     methods: {
