@@ -3,7 +3,7 @@
 const axios = require('axios').default;
 const api = axios.create({ baseURL: 'http://localhost:5150' });
 
-function getMenu(menuId) {
+/*
     menuId;
     return {
         menu_id: '1',
@@ -64,6 +64,10 @@ function getMenu(menuId) {
             }
         ]
     };
+    */
+
+function getMenu(menuId) {
+    return api.get('/menus/' + menuId).then(response => response.data);
 }
 
 function login(userCredentials) {

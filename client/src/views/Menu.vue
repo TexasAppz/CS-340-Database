@@ -18,13 +18,18 @@ import dataService from '../store/dataService';
 export default {
     data() {
         return {
-            entireMenu: {},
+            //entireMenu: {},
             thisMenuId: 0
         };
     },
+    asyncComputed: {
+        entireMenu() {
+            return dataService.getMenu(this.$route.params.id);
+        }
+    },
     methods: {
         getMenuItems(id) {
-            this.entireMenu = dataService.getMenu(id);
+            //this.entireMenu = dataService.getMenu(id);
             this.thisMenuId = id;
         }
     },
