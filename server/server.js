@@ -8,13 +8,14 @@
 
 let express = require("express");
 let bodyParser = require("body-parser");
-let path = require("path");
+let cors = require("cors");
 
 let app = express();
-app.set("port", 3000);
+app.set("port", 5150);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 let router = require("./router")(app);
 

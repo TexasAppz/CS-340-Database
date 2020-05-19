@@ -1,5 +1,8 @@
 /*eslint no-unused-vars: "off"*/
 
+const axios = require('axios').default;
+const api = axios.create({ baseURL: 'http://localhost:5150' });
+
 function getMenu(menuId) {
     menuId;
     return {
@@ -105,22 +108,7 @@ function getOpenOrders() {
 }
 
 function getMenus() {
-    return {
-        menus: [
-            {
-                menu_id: 1,
-                name: 'Breakfast'
-            },
-            {
-                menu_id: 2,
-                name: 'Lunch'
-            },
-            {
-                menu_id: 3,
-                name: 'Dinner'
-            }
-        ]
-    };
+    return api.get('/menus').then(response => response.data);
 }
 
 function getMenuItems() {

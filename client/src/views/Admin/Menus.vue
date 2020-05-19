@@ -13,7 +13,7 @@
                     <span> Add New</span>
                 </span>
             </div>
-            <b-table striped hover :items="data.menus" :fields="fields">
+            <b-table striped hover :items="menus" :fields="fields">
                 <template v-slot:cell(Delete)="item">
                     <div>
                         <span
@@ -57,6 +57,8 @@
 // import store from '@/store/index';
 // import router from '@/router/index';
 import dataService from '../../store/dataService';
+//const axios = require('axios').default;
+//const api = axios.create({ baseURL: 'http://localhost:5150' });
 
 export default {
     data() {
@@ -68,8 +70,8 @@ export default {
             fields: ['Edit', { key: 'name', label: 'Menu Name' }, 'Delete']
         };
     },
-    computed: {
-        data: function() {
+    asyncComputed: {
+        menus() {
             return dataService.getMenus();
         }
     },

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import AsyncComputed from 'vue-async-computed';
 import BootstrapVue from 'bootstrap-vue';
 import App from './App.vue';
 import router from './router';
@@ -37,7 +38,7 @@ library.add(faCheckSquare);
 library.add(faUsers);
 
 Vue.use(BootstrapVue);
-
+Vue.use(AsyncComputed);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 //Global Components
