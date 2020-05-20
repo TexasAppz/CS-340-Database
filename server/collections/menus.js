@@ -29,10 +29,10 @@ router.get("/:id", function (req, res, next) {
       i.ingredient_id, 
       i.name ingredient_name 
     FROM 
-      menus m JOIN 
-      menu_items mi on m.menu_id = mi.menu_id JOIN 
-      item_ingredients ii on mi.menu_item_id = ii.menu_item_id JOIN 
-      ingredients i on ii.ingredient_id = i.ingredient_id 
+      Menus m JOIN 
+      Menu_Items mi on m.menu_id = mi.menu_id JOIN 
+      Item_Ingredients ii on mi.menu_item_id = ii.menu_item_id JOIN 
+      Ingredients i on ii.ingredient_id = i.ingredient_id 
     WHERE 
       m.menu_id = ? 
     `;
