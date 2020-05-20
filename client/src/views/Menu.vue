@@ -18,28 +18,17 @@ import dataService from '../store/dataService';
 export default {
     data() {
         return {
-            //entireMenu: {},
-            thisMenuId: 0
+            menuName: '',
+            thisMenuId: this.$route.params.id
         };
     },
     asyncComputed: {
-        entireMenu() {
-            return dataService.getMenu(this.$route.params.id);
+        entireMenu: {
+            get() {
+                return dataService.getMenu(this.$route.params.id);
+            },
+            default: { name: '' }
         }
-    },
-    methods: {
-        getMenuItems(id) {
-            //this.entireMenu = dataService.getMenu(id);
-            this.thisMenuId = id;
-        }
-    },
-    mounted() {
-        this.thisMenuId = this.$route.params.id;
-        this.getMenuItems(this.thisMenuId);
-    },
-    beforeRouteUpdate(to, from, next) {
-        this.getMenuItems(to.params.id);
-        next();
     }
 };
 </script>
