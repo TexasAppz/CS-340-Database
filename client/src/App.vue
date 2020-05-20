@@ -37,15 +37,11 @@
                         right
                         style="list-style: none;"
                     >
-                        <b-dropdown-item @click="gotoMenu(1)"
-                            >Breakfast</b-dropdown-item
-                        >
-                        <b-dropdown-item @click="gotoMenu(2)"
-                            >Lunch</b-dropdown-item
-                        >
-                        <b-dropdown-item @click="gotoMenu(3)"
-                            >Dinner</b-dropdown-item
-                        >
+                        <div v-for="item in menus" :key="item.menu_id">
+                            <b-dropdown-item @click="gotoMenu(item.menu_id)"
+                                >{{ item.name }}
+                            </b-dropdown-item>
+                        </div>
                     </b-nav-item-dropdown>
                 </div>
             </div>
@@ -136,6 +132,7 @@
 import store from '@/store/index';
 import { mapState } from 'vuex';
 import router from '@/router/index';
+import dataService from './store/dataService';
 
 export default {
     //name: 'main',
@@ -158,6 +155,11 @@ export default {
             set(junk) {
                 return junk;
             }
+        }
+    },
+    asyncComputed: {
+        menus() {
+            return dataService.getMenus();
         }
     },
     methods: {

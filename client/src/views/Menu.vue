@@ -1,7 +1,7 @@
 <template>
     <div id="menu">
         <div style="text-align:center;margin:10px">
-            <h1>{{ entireMenu.name }} Menu Page {{ thisMenuId }}</h1>
+            <h1>{{ entireMenu.name }} Menu</h1>
         </div>
 
         <div style="width:800px; margin: 0 auto">
