@@ -146,11 +146,17 @@ export default {
         isLoggedIn: {
             get: function() {
                 return store.getters['customer'] != null;
+            },
+            set(junk) {
+                return junk;
             }
         },
         showCartIcon: {
             get: function() {
                 return store.getters['showCartIcon'];
+            },
+            set(junk) {
+                return junk;
             }
         }
     },
