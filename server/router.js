@@ -7,6 +7,7 @@ module.exports = function (app) {
   app.use("/customers", require("./collections/customers"));
   app.use("/menus", require("./collections/menus"));
   app.use("/ingredients", require("./collections/ingredients"));
+  app.use("/orders", require("./collections/orders"));
 
   // Catch all
   app.use("*", function (req, res, next) {
