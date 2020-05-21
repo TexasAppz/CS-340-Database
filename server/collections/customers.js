@@ -19,16 +19,39 @@ router.get("/", function (req, res, next) {
 
 // GET /customers/:id
 // Returns all values from the database for the table Customers
-router.get("/:id", function (req, res, next) {
+router.get("/:customerId", function (req, res, next) {
   let sqlQuery = "SELECT * FROM Customers WHERE customer_id = ?";
-  let getData = req.params.id;
+  let getData = req.params.customerId;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
       next(err);
       return;
     }
-
     res.end(JSON.stringify(result));
+  });
+});
+
+// GET /customers/byEmail/:emailAddress
+// Returns all values from the database for the table Customers
+router.get("/byEmail/:emailAddress", function (req, res, next) {
+  let sqlQuery = "SELECT * FROM Customers WHERE email = ?";
+  let getData = req.params.emailAddress;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    //If no records returned, send back something indicating that
+    if (result.length > 0) {
+      res.end(JSON.stringify(result));
+    } else {
+      res.end(
+        JSON.stringify({
+          status_code: "100",
+          message: "No Records Found",
+        })
+      );
+    }
   });
 });
 
