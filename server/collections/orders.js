@@ -17,10 +17,10 @@ router.get("/", function (req, res, next) {
     });
 });
 // GET /orders/new/
-// Returns all new orders from the database
+// Returns all new orders 
 router.get("/new/", function (req, res, next) {
     let sqlQuery = "SELECT * FROM Orders WHERE status = 'New' ";
-    let getData = req.params.emailAddress;
+    let getData = req.params.status;
     mysql.pool.query(sqlQuery, getData, function (err, result) {
         if (err) {
             next(err);
@@ -40,10 +40,10 @@ router.get("/new/", function (req, res, next) {
     });
 });
 // GET /orders/noickup/
-// Returns all new orders from the database
+// Returns all  orders where they have not been picked up
 router.get("/nopickup/", function (req, res, next) {
     let sqlQuery = "SELECT * FROM Orders WHERE status <> 'Picked up' ";
-    let getData = req.params.emailAddress;
+    let getData = req.params.status;
     mysql.pool.query(sqlQuery, getData, function (err, result) {
         if (err) {
             next(err);
@@ -63,9 +63,11 @@ router.get("/nopickup/", function (req, res, next) {
     });
 });
 
-router.get("/:order_id", function (req, res, next) {
+// GET /orders/noickup/
+// Returns all  orders where they have not been picked up
+router.get("/:orderId", function (req, res, next) {
     let sqlQuery = "SELECT * FROM Orders WHERE order_id = ? ";
-    let getData = req.params.order_id;
+    let getData = req.params.orderId;
     mysql.pool.query(sqlQuery, getData, function (err, result) {
         if (err) {
             next(err);
@@ -86,9 +88,9 @@ router.get("/:order_id", function (req, res, next) {
 });
 
 //Inserts new order record given a customer_id
-router.post("/customer/:order_id", function (req, res, next) {
-    let sqlQuery = "INSERT INTO Orders (order_id,customer_id) VALUES (?,?)";
-    let sqlParams = [req.body.order_id, req.body.customer_id];
+router.post("/customer/:customer_id", function (req, res, next) {
+    let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
+    let sqlParams = [req.body.customer_id];
     let isValid = true; //Could be used for a validation of the parameters
 
     let returnMsg = {};
