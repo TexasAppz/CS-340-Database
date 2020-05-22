@@ -17,9 +17,11 @@ router.get("/", function (req, res, next) {
   });
 });
 
+
 //Gets all of the data for a given menu
 router.get("/:id", function (req, res, next) {
-  let sqlQuery = `
+  let sqlQuery = 
+  `
     SELECT 
       m.menu_id, 
       m.name menu_name, 

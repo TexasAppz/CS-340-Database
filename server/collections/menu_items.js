@@ -22,5 +22,40 @@ let mysql = require("../dbcon.js");
         });
     });
 
+// GET /menu_items/phrase
+// get all menu items information, including ingredients, using a search phrase
+router.get("/phrase/", function (req, res, next) {
+    let sqlQuery = 
+    `SELECT *
+        from Menus m
+        JOIN Menu_Items mi 
+            ON (m.menu_id = mi.menu_id)
+        JOIN Item_Ingredients ii 
+            ON (mi.menu_item_id = ii.menu_item_id)
+        JOIN Ingredients i 
+            ON (ii.ingredient_id = i.ingredient_id)
+        WHERE 
+            m.name like '%:Tacos%' 
+                OR 
+            mi.name like '%Waffles%'`;
+    let getData = req.params.name;
+    mysql.pool.query(sqlQuery, getData, function (err, result) {
+        if (err) {
+            next(err);
+            return;
+        }
+        //If no records returned, send back something indicating that
+        if (result.length > 0) {
+            res.end(JSON.stringify(result));
+        } else {
+            res.end(
+                JSON.stringify({
+                    status_code: "100",
+                    message: "No Records Found",
+                })
+            );
+        }
+    });
+});
 
 module.exports = router;

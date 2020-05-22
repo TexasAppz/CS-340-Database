@@ -27,7 +27,7 @@ router.get("/", function (req, res, next) {
     });
 });
 
-// GET /order_items/:order_id
+// GET /order_items/:orderId
 // Returns order items for a given order
 router.get("/:orderId", function (req, res, next) {
     let sqlQuery = `SELECT oi.order_item_id, mi.name as MenuItemName, oi.price, oi.qty
@@ -57,5 +57,34 @@ router.get("/:orderId", function (req, res, next) {
     });
 });
 
+// POST /order_item/:order_item_id
+// insert a line item to an order
+router.post("/", function (req, res, next) {
+    let sqlQuery = 
+        `INSERT INTO Order_Items 
+        (order_item_id, order_id, menu_item_id, price, qty, comment)
+        VALUES (?,?,?,?,?,?)`;
+    let sqlParams = [req.body.order_item_id, req.body.order_id, req.body.menu_item_id,
+        req.body.price, req.body.qty, req.body.comment];
+    let isValid = true; //Could be used for a validation of the parameters
+
+    let returnMsg = {};
+    if (isValid) {
+        mysql.pool.query(sqlQuery, sqlParams, function (err, result) {
+            if (err) {
+                returnMsg.status_code = 999;
+                returnMsg.message = err.sqlMessage;
+                res.end(JSON.stringify(returnMsg));
+            } else {
+                returnMsg.customer_id = result.insertId;
+                res.end(JSON.stringify(returnMsg));
+            }
+        });
+    } else {
+        returnMsg.status_code = 0;
+        returnMsg.message = "Invalid data";
+        res.end(JSON.stringify(returnMsg));
+    }
+});
 
 module.exports = router;
