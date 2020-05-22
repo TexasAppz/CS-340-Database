@@ -86,9 +86,9 @@ router.get("/:order_id", function (req, res, next) {
 });
 
 //Inserts new order record given a customer_id
-router.post("/customer/:customer_id", function (req, res, next) {
-    let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
-    let sqlParams = [req.body.customer_id];
+router.post("/customer/:order_id", function (req, res, next) {
+    let sqlQuery = "INSERT INTO Orders (order_id,customer_id) VALUES (?,?)";
+    let sqlParams = [req.body.order_id, req.body.customer_id];
     let isValid = true; //Could be used for a validation of the parameters
 
     let returnMsg = {};
