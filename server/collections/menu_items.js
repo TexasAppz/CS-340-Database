@@ -3,6 +3,38 @@ let express = require("express");
 let router = express.Router();
 let mysql = require("../dbcon.js");
 
+
+// -- Main Page: 
+// Return the menu name and item information for all menu items in the database
+// GET /menu_items
+// Returns menu Item Name
+router.get("/itemName", function (req, res, next) {
+    let sqlQuery =   
+    `SELECT  me.name menuName, mi.name menuItemName
+        FROM Menus me
+        JOIN Menu_Items mi
+        ON(me.menu_id = mi.menu_id)`;
+    let getData = [req.params.menuName];
+    mysql.pool.query(sqlQuery, getData, function (err, result) {
+        if (err) {
+            next(err);
+            return;
+        }
+        //If no records returned, send back something indicating that
+        if (result.length > 0) {
+            res.end(JSON.stringify(result));
+        } else {
+            res.end(
+                JSON.stringify({
+                    status_code: "100",
+                    message: "No Records Found",
+                })
+            );
+        }
+    });
+});
+
+
 // GET /menu_items
 // Returns all menu items
     router.get("/", function (req, res, next) {

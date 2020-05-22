@@ -62,10 +62,9 @@ router.get("/:orderId", function (req, res, next) {
 router.post("/", function (req, res, next) {
     let sqlQuery = 
         `INSERT INTO Order_Items 
-        (order_item_id, order_id, menu_item_id, price, qty, comment)
-        VALUES (?,?,?,?,?,?)`;
-    let sqlParams = [req.body.order_item_id, req.body.order_id, req.body.menu_item_id,
-        req.body.price, req.body.qty, req.body.comment];
+        (order_id, order_item_id)
+        VALUES (?,?)`;
+    let sqlParams = [req.body.order_id, req.body.order_item_id];
     let isValid = true; //Could be used for a validation of the parameters
 
     let returnMsg = {};
@@ -76,7 +75,7 @@ router.post("/", function (req, res, next) {
                 returnMsg.message = err.sqlMessage;
                 res.end(JSON.stringify(returnMsg));
             } else {
-                returnMsg.customer_id = result.insertId;
+                returnMsg.order_id = result.insertId;
                 res.end(JSON.stringify(returnMsg));
             }
         });
