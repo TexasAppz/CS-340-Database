@@ -6,7 +6,7 @@ let mysql = require("../dbcon.js");
 // GET /order_items
 // Returns all order items
 router.get("/", function (req, res, next) {
-    let sqlQuery = "SELECT * FROM Order_Items";
+    let sqlQuery = `SELECT * FROM Order_Items`;
     let getData = req.params.emailAddress;
     mysql.pool.query(sqlQuery, getData, function (err, result) {
         if (err) {

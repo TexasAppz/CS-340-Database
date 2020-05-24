@@ -6,11 +6,10 @@ let mysql = require("../dbcon.js");
 // GET /ingredients
 // Returns all values from the database for the table Menus
 router.get("/", function (req, res, next) {
-  let sqlQuery = `
-    select ingredient_id, name
-    from Ingredients
-    order by name
-    `;
+  let sqlQuery = 
+    `SELECT *
+    FROM Ingredients
+    ORDER BY name`;
 
   mysql.pool.query(sqlQuery, function (err, result) {
     if (err) {
@@ -48,6 +47,32 @@ router.get("/:ingredientId", function (req, res, next) {
       );
     }
   });
+});
+
+
+// POST /ingredients/
+// Add New Menu Form: Create a new ingredient given a new name
+router.post("/", function (req, res, next) {
+  let sqlQuery = "INSERT INTO Ingredients (name) VALUES (?)";
+  let sqlParams = [req.body.name];
+  let isValid = true; //Could be used for a validation of the parameters
+
+  let returnMsg = {};
+  if (isValid) {
+    mysql.pool.query(sqlQuery, sqlParams, function (err, result) {
+      if (err) {
+        returnMsg.status_code = 999;
+        returnMsg.message = err.sqlMessage;
+        res.end(JSON.stringify(returnMsg));
+      } else {
+        returnMsg.order_id = result.insertId;
+        res.end(JSON.stringify(returnMsg));
+      }
+    });
+  } else {
+    returnMsg.status_code = 0;
+    returnMsg.message = "Invalid data";
+  }
 });
 
 //Required to work!!!!!
