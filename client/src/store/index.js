@@ -9,6 +9,7 @@ import dataService from '../store/dataService';
 export default new Vuex.Store({
     showCartIcon: true,
     state: {
+        user: null,
         order_id: null,
         customer: null,
         cart: [],
@@ -57,7 +58,7 @@ export default new Vuex.Store({
         ADD_TO_CART(state, payload) {
             let updated = false;
             for (let i = 0; i < state.cart.length; ++i) {
-                if (state.cart[i].menuitem_id === payload.menuitem_id) {
+                if (state.cart[i].menu_item_id === payload.menu_item_id) {
                     state.cart[i].qty += payload.qty;
                     updated = true;
                 }
@@ -69,7 +70,7 @@ export default new Vuex.Store({
         },
         REMOVE_FROM_CART(state, payload) {
             for (let i = 0; i < state.cart.length; ++i) {
-                if (state.cart[i].menuitem_id === payload.menuitem_id) {
+                if (state.cart[i].menu_item_id === payload.menu_item_id) {
                     state.cart.splice(i, 1);
                 }
             }
@@ -94,6 +95,9 @@ export default new Vuex.Store({
         },
         SET_CURRENT_CUSTOMER(state, payload) {
             state.customer = payload;
+        },
+        SET_CURRENT_USER(state, payload) {
+            state.user = payload;
         },
         SET_CURRENT_ORDER_ID(state, payload) {
             state.order_id = payload;
@@ -124,12 +128,19 @@ export default new Vuex.Store({
         setCustomer(context, payload) {
             context.commit('SET_CURRENT_CUSTOMER', payload);
         },
+        setUser(context, payload) {
+            context.commit('SET_CURRENT_USER', payload);
+            if (payload === null) {
+                context.commit('UPDATE_SHOWCARTICON', true);
+            }
+        },
         setOrder(context, payload) {
-            let thisOrder = dataService.getOrder();
-            context.commit('SET_CURRENT_ORDER_ID', thisOrder.order_id);
-            context.commit('SET_CURRENT_CUSTOMER', thisOrder.customer);
-            context.commit('SET_FULL_CART', thisOrder.order_items);
-            context.commit('UPDATE_CART_SUMMARY');
+            dataService.getOrder(payload).then(function(result) {
+                context.commit('SET_CURRENT_ORDER_ID', result.order_id);
+                context.commit('SET_CURRENT_CUSTOMER', result.customer[0]);
+                context.commit('SET_FULL_CART', result.order_items);
+                context.commit('UPDATE_CART_SUMMARY');
+            });
         }
     }
 });

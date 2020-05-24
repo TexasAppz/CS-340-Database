@@ -1,7 +1,9 @@
 <template>
     <div>
         <div style="text-align:center;padding:20px">
-            <h2>Order Number {{ order.order_id }} for {{ customer.name }}</h2>
+            <h2 v-if="customer != null">
+                Order: {{ order.order_id }} for {{ customer.name }}
+            </h2>
         </div>
 
         <div style="width:800px; margin: 0 auto">
@@ -52,7 +54,11 @@
                                     style="margin-right:10px"
                                 ></b-form-select>
                             </td>
-                            <td><b-button variant="primary">Add</b-button></td>
+                            <td>
+                                <b-button variant="primary" @click="addToCart()"
+                                    >Add</b-button
+                                >
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -143,29 +149,32 @@ export default {
             store.dispatch('updateCartItem', item);
         },
         addToCart() {
-            store
-                .dispatch('addToCart', {
-                    menuitem_id: this.menuItem.menuitem_id,
-                    name: this.menuItem.name,
-                    price: this.menuItem.price,
-                    qty: this.qty
-                })
-                .then(() => {
-                    this.qty = 1;
-                });
+            store.dispatch('addToCart', this.menuItemSelected);
         },
         deleteItem(item) {
             store.dispatch('removeFromCart', item);
         }
     },
-    mounted() {
-        let menuItems = dataService.getMenuItems().menuItems;
-        for (let i = 0; i < menuItems.length; i++) {
-            this.menuItems.push({
-                text: menuItems[i].name + ' (' + menuItems[i].price + ')',
-                value: menuItems[i].menu_item_id
+    asyncComputed: {
+        menuItems: function() {
+            let rtn = [];
+            dataService.getMenuItems().then(function(data) {
+                for (let i = 0; i < data.length; i++) {
+                    rtn.push({
+                        text: data[i].name + ' (' + data[i].price + ')',
+                        value: {
+                            menu_item_id: data[i].menu_item_id,
+                            name: data[i].name,
+                            price: data[i].price,
+                            qty: 1
+                        }
+                    });
+                }
             });
+            return rtn;
         }
+    },
+    mounted() {
         this.order.order_id = this.$route.params.id;
         store.dispatch('setOrder', this.$route.params.id);
     }

@@ -43,7 +43,7 @@ router.get("/byEmail/:emailAddress", function (req, res, next) {
     }
     //If no records returned, send back something indicating that
     if (result.length > 0) {
-      res.end(JSON.stringify(result));
+      res.end(JSON.stringify(result[0]));
     } else {
       res.end(
         JSON.stringify({

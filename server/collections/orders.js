@@ -42,7 +42,14 @@ router.get("/new/", function (req, res, next) {
 // GET /orders/noickup/
 // Returns all  orders where they have not been picked up
 router.get("/nopickup/", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Orders WHERE status <> 'Picked up' ";
+  let sqlQuery = `
+    SELECT 
+      o.*,
+      c.name customerName
+    FROM Orders o
+    join Customers c on o.customer_id = c.customer_id
+    WHERE status <> 'Picked up'
+    `;
   let getData = req.params.status;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
@@ -66,50 +73,95 @@ router.get("/nopickup/", function (req, res, next) {
 // GET /orders/noickup/
 // Returns all  orders where they have not been picked up
 router.get("/:orderId", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Orders WHERE order_id = ? ";
-  let getData = req.params.orderId;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
+  let thisOrder = {};
+
+  mysql.pool.query(
+    `SELECT * 
+    FROM Orders
+    WHERE order_id = ? `,
+    req.params.orderId,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+
+      if (result.length > 0) {
+        thisOrder = result[0];
+
+        //--------------------------- Begin inner -----------
+        mysql.pool.query(
+          `SELECT oi.*, mi.name
+          FROM Order_Items oi
+          JOIN Menu_Items mi on oi.menu_item_id = mi.menu_item_id
+          WHERE oi.order_id = ?`,
+          req.params.orderId,
+          function (err, result) {
+            if (err) {
+              next(err);
+              return;
+            }
+            if (result.length > 0) {
+              thisOrder.order_items = result;
+
+              //--------------------------- Begin inner -----------
+              mysql.pool.query(
+                `SELECT *
+                FROM Customers
+                WHERE customer_id = ?`,
+                thisOrder.customer_id,
+                function (err, result) {
+                  if (err) {
+                    next(err);
+                    return;
+                  }
+                  if (result.length > 0) {
+                    thisOrder.customer = result;
+                    res.end(JSON.stringify(thisOrder));
+                  }
+                }
+              );
+              //--------------------------- End inner -----------
+            }
+          }
+        );
+        //--------------------------- End inner -----------
+      } else {
+        //If no records returned, send back something indicating that
+        res.end(
+          JSON.stringify({
+            status_code: "100",
+            message: "No Records Found",
+          })
+        );
+      }
     }
-    //If no records returned, send back something indicating that
-    if (result.length > 0) {
-      res.end(JSON.stringify(result));
-    } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
-    }
-  });
+  );
 });
 
 //Inserts new order record given a customer_id
 
 router.post("/", function (req, res, next) {
-    let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
-    let sqlParams = [req.body.customer_id];
-    let isValid = true; //Could be used for a validation of the parameters
+  let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
+  let sqlParams = [req.body.customer_id];
+  let isValid = true; //Could be used for a validation of the parameters
 
-    let returnMsg = {};
-    if (isValid) {
-        mysql.pool.query(sqlQuery, sqlParams, function (err, result) {
-            if (err) {
-                returnMsg.status_code = 999;
-                returnMsg.message = err.sqlMessage;
-                res.end(JSON.stringify(returnMsg));
-            } else {
-                returnMsg.order_id = result.insertId;
-                res.end(JSON.stringify(returnMsg));
-            }
-        });
-    } else {
-        returnMsg.status_code = 0;
-        returnMsg.message = "Invalid data";
-    }
+  let returnMsg = {};
+  if (isValid) {
+    mysql.pool.query(sqlQuery, sqlParams, function (err, result) {
+      if (err) {
+        returnMsg.status_code = 999;
+        returnMsg.message = err.sqlMessage;
+        res.end(JSON.stringify(returnMsg));
+      } else {
+        returnMsg.order_id = result.insertId;
+        res.end(JSON.stringify(returnMsg));
+      }
+    });
+  } else {
+    returnMsg.status_code = 0;
+    returnMsg.message = "Invalid data";
+  }
 });
 
 module.exports = router;

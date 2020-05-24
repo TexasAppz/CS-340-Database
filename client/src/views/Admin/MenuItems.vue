@@ -13,7 +13,7 @@
                     <span> Add New</span>
                 </span>
             </div>
-            <b-table striped hover :items="data.menuItems" :fields="fields">
+            <b-table striped hover :items="menuItems" :fields="fields">
                 <template v-slot:cell(Delete)="item">
                     <div>
                         <span
@@ -136,8 +136,8 @@ export default {
             iFields: ['name', 'Delete']
         };
     },
-    computed: {
-        data: function() {
+    asyncComputed: {
+        menuItems: function() {
             return dataService.getMenuItems();
         },
         meuns: function() {

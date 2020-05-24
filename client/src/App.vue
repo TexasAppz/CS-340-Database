@@ -71,8 +71,11 @@
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto">
                 <span style="padding-right:20px;padding-top:15px">
+                    <span v-show="isLoggedIn"
+                        >Logged in as: {{ currentUser }} |
+                    </span>
                     <span v-show="isLoggedIn" @click="logout" class="clickable">
-                        Logout
+                        Logout |
                     </span>
                     <span v-if="!isLoggedIn">
                         <router-link
@@ -86,9 +89,9 @@
                             to="/Register"
                             >Register</router-link
                         >
+                        |
                     </span>
                     <span>
-                        |
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Admin"
@@ -136,25 +139,21 @@ import dataService from './store/dataService';
 
 export default {
     //name: 'main',
+    data() {
+        return {
+            showCartIcon: true,
+            isLoggedIn: false
+        };
+    },
     computed: {
         numItemsInCart() {
             return store.getters.numItemsInCart;
         },
-        isLoggedIn: {
-            get: function() {
-                return store.getters['customer'] != null;
-            },
-            set(junk) {
-                return junk;
+        currentUser() {
+            if (this.isLoggedIn) {
+                return store.state.user.name;
             }
-        },
-        showCartIcon: {
-            get: function() {
-                return store.getters['showCartIcon'];
-            },
-            set(junk) {
-                return junk;
-            }
+            return '';
         }
     },
     asyncComputed: {
@@ -186,12 +185,13 @@ export default {
         },
         logout() {
             let userCredentials = null;
+            store.dispatch('setUser', userCredentials);
             store.dispatch('setCustomer', userCredentials);
             router.push({ name: 'Home' }).catch(err => {});
         }
     },
     mounted: function() {
-        if (store.state.customer) {
+        if (store.state.user) {
             this.isLoggedIn = true;
         } else {
             this.isLoggedIn = false;
@@ -199,11 +199,18 @@ export default {
     },
 
     watch: {
-        'store.state.customer': function() {
-            if (store.state.customer) {
+        '$store.state.user': function() {
+            if (store.state.user) {
                 this.isLoggedIn = true;
             } else {
                 this.isLoggedIn = false;
+            }
+        },
+        '$store.state.showCartIcon': function() {
+            if (store.state.showCartIcon) {
+                this.showCartIcon = true;
+            } else {
+                this.showCartIcon = false;
             }
         }
     }

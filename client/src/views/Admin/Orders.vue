@@ -15,7 +15,7 @@
                     <span> Add New</span>
                 </span>
             </div>
-            <b-table striped hover :items="data.orders" :fields="fields">
+            <b-table striped hover :items="openOrders" :fields="fields">
                 <template v-slot:cell(Delete)="item">
                     <div>
                         <span
@@ -72,13 +72,13 @@ export default {
                 'Edit',
                 { key: 'order_id', label: 'Order Number' },
                 { key: 'customerName', label: 'Customer Name' },
-                { key: 'orderStatus', label: 'Status' },
+                { key: 'status', label: 'Status' },
                 'Delete'
             ]
         };
     },
-    computed: {
-        data: function() {
+    asyncComputed: {
+        openOrders: function() {
             return dataService.getOpenOrders();
         }
     },

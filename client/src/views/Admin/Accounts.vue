@@ -15,7 +15,7 @@
                     <span> Add New</span>
                 </span>
             </div>
-            <b-table striped hover :items="data.accounts" :fields="fields">
+            <b-table striped hover :items="accounts" :fields="fields">
                 <template v-slot:cell(Delete)="item">
                     <div>
                         <span
@@ -83,8 +83,8 @@ export default {
             ]
         };
     },
-    computed: {
-        data: function() {
+    asyncComputed: {
+        accounts: function() {
             return dataService.getAccounts();
         }
     },

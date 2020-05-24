@@ -23,7 +23,7 @@
             <b-table
                 striped
                 hover
-                :items="data.ingredients"
+                :items="ingredients"
                 :fields="fields"
                 :per-page="perPage"
                 :current-page="currentPage"
@@ -102,12 +102,18 @@ export default {
             sortDesc: false
         };
     },
-    computed: {
-        data: function() {
+    asyncComputed: {
+        ingredients: function() {
             return dataService.getIngredients();
-        },
+        }
+    },
+    computed: {
         rows() {
-            return this.data.ingredients.length;
+            let rtn = 0;
+            if (this.ingredients !== null) {
+                rtn = this.ingredients.length;
+            }
+            return rtn;
         }
     },
     methods: {
