@@ -104,7 +104,7 @@ router.get("/:orderId", function (req, res, next) {
             if (result.length > 0) {
               thisOrder.order_items = result;
 
-              //--------------------------- Begin inner -----------
+              //--------------------------- Begin inner2 -----------
               mysql.pool.query(
                 `SELECT *
                 FROM Customers
@@ -121,7 +121,7 @@ router.get("/:orderId", function (req, res, next) {
                   }
                 }
               );
-              //--------------------------- End inner -----------
+              //--------------------------- End inner2 -----------
             }
           }
         );
