@@ -11,6 +11,10 @@ function login(username) {
     }
 }
 
+function insertCustomer(customer) {
+    return api.post('/customers', customer).then(response => response.data);
+}
+
 function getOpenOrders() {
     return api.get('/orders/nopickup').then(response => response.data);
 }
@@ -34,14 +38,11 @@ function getIngredients() {
 }
 
 function getMenuItemIngredients(menu_item_id) {
-    menu_item_id;
-    return {
-        ingredients: [
-            { ingredient_id: 1, name: 'Buttermilk pancakes' },
-            { ingredient_id: 2, name: 'Bacon' },
-            { ingredient_id: 3, name: 'Eggs' }
-        ]
-    };
+    if (typeof menu_item_id !== 'undefined') {
+        return api
+            .get('/ingredients/menu_item/' + menu_item_id)
+            .then(response => response.data);
+    }
 }
 
 function getAccounts() {
@@ -57,6 +58,7 @@ function getOrder(id) {
 module.exports = {
     getMenu,
     login,
+    insertCustomer,
     getOpenOrders,
     getMenus,
     getMenuItems,

@@ -6,8 +6,7 @@ let mysql = require("../dbcon.js");
 // GET /ingredients
 // Returns all values from the database for the table Menus
 router.get("/", function (req, res, next) {
-  let sqlQuery = 
-    `SELECT *
+  let sqlQuery = `SELECT *
     FROM Ingredients
     ORDER BY name`;
 
@@ -24,8 +23,7 @@ router.get("/", function (req, res, next) {
 // GET /ingredients/:ingredientId
 // Select a specific ingredient given a ingredients id
 router.get("/:ingredientId", function (req, res, next) {
-  let sqlQuery = 
-    `SELECT ingredient_id, name
+  let sqlQuery = `SELECT ingredient_id, name
       FROM Ingredients
       WHERE ingredient_id = ?
       ORDER BY name ASC`;
@@ -49,6 +47,32 @@ router.get("/:ingredientId", function (req, res, next) {
   });
 });
 
+// GET /ingredients/:ingredientId
+// Select a specific ingredient given a ingredients id
+router.get("/menu_item/:menuItemId", function (req, res, next) {
+  let sqlQuery = `SELECT ingredient_id, name
+    FROM Ingredients
+    WHERE menu_item_id = ?
+    ORDER BY name ASC`;
+  let getData = req.params.menuItemId;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    //If no records returned, send back something indicating that
+    if (result.length > 0) {
+      res.end(JSON.stringify(result));
+    } else {
+      res.end(
+        JSON.stringify({
+          status_code: "100",
+          message: "No Records Found",
+        })
+      );
+    }
+  });
+});
 
 // POST /ingredients/
 // Add New Menu Form: Create a new ingredient given a new name

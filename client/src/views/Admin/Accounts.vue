@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :key="componentKey">
         <h1>{{ name }}</h1>
         <div style="width:600px; margin-left:50px;margin-top:40px">
             <div>
@@ -40,7 +40,7 @@
                 </template>
             </b-table>
         </div>
-        <b-modal id="modalForm1" :title="formTitle">
+        <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
             <b-form>
                 <b-form-input
                     id="name"
@@ -65,13 +65,15 @@
 
 <script>
 // import store from '@/store/index';
-// import router from '@/router/index';
+//import router from '@/router/index';
 import dataService from '../../store/dataService';
 
 export default {
     data() {
         //view model
         return {
+            accounts: [],
+            componentKey: 0,
             selectedItem: {},
             formTitle: '',
             name: 'Account Profiles',
@@ -83,12 +85,15 @@ export default {
             ]
         };
     },
-    asyncComputed: {
-        accounts: function() {
-            return dataService.getAccounts();
-        }
+    mounted() {
+        this.getAccounts();
     },
     methods: {
+        getAccounts() {
+            dataService.getAccounts().then(result => {
+                this.accounts = result;
+            });
+        },
         deleteItem(item) {
             alert(item.name + ' would be deleted');
         },
@@ -101,6 +106,22 @@ export default {
             this.selectedItem = {};
             this.formTitle = 'Add New Account';
             this.$bvModal.show('modalForm1');
+        },
+        OkClicked() {
+            if (this.selectedItem.customer_id !== undefined) {
+                alert('Editing not yet implimented');
+            } else {
+                let newCustomer = {
+                    name: this.selectedItem.name,
+                    email: this.selectedItem.email,
+                    password: 'default'
+                };
+
+                dataService.insertCustomer(newCustomer).then(result => {
+                    console.log(result);
+                    this.getAccounts();
+                });
+            }
         }
     }
 };

@@ -75,7 +75,7 @@
                         >Logged in as: {{ currentUser }} |
                     </span>
                     <span v-show="isLoggedIn" @click="logout" class="clickable">
-                        Logout |
+                        Logout
                     </span>
                     <span v-if="!isLoggedIn">
                         <router-link
@@ -89,9 +89,9 @@
                             to="/Register"
                             >Register</router-link
                         >
-                        |
                     </span>
-                    <span>
+                    <span v-show="showCartIcon">
+                        |
                         <router-link
                             class="navBarTextColor navBarTextHover"
                             to="/Admin"
@@ -99,7 +99,6 @@
                         >
                     </span>
                 </span>
-
                 <div
                     id="cartIconWithTotalItems"
                     class="clickable navBarTextHover"
@@ -141,7 +140,6 @@ export default {
     //name: 'main',
     data() {
         return {
-            showCartIcon: true,
             isLoggedIn: false
         };
     },
@@ -154,6 +152,9 @@ export default {
                 return store.state.user.name;
             }
             return '';
+        },
+        showCartIcon() {
+            return store.state.showCartIcon;
         }
     },
     asyncComputed: {
