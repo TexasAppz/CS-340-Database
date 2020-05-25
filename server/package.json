@@ -4,7 +4,9 @@
   "description": "Backend api for cs340 app",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-forever": "./node_modules/forever/bin/forever start server.js",
+    "stop-forever": "./node_modules/forever/bin/forever stop server.js"
   },
   "author": "Jamie Garcia & Phil Cazella",
   "license": "ISC",
@@ -12,6 +14,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "forever": "^3.0.0",
     "mysql": "^2.18.1",
     "path": "^0.12.7"
   }

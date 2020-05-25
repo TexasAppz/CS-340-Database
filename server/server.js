@@ -21,7 +21,7 @@ let router = require("./router")(app);
 
 app.listen(app.get("port"), function () {
   console.log(
-    "Express started on http://localhost:" +
+    "Express started on port " +
       app.get("port") +
       "; press Ctrl-C to terminate."
   );
