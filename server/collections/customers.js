@@ -80,4 +80,34 @@ router.post("/", function (req, res, next) {
   }
 });
 
+// delete /customers/:id
+// Deletes a row from the database for the table Customers
+router.delete("/:customerId", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Customers WHERE customer_id = ?";
+  let getData = req.params.customerId;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
+// Patch /customers/:customer_id
+// Update the provided values for a specific row in the Customers table
+router.patch("/:customer_id", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Customers SET ? WHERE customer_id = " + [req.params.customer_id],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
 module.exports = router;

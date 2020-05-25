@@ -95,7 +95,9 @@ export default {
             });
         },
         deleteItem(item) {
-            alert(item.name + ' would be deleted');
+            dataService.deleteCustomer(item.customer_id).then(() => {
+                this.getAccounts();
+            });
         },
         editItem(item) {
             this.selectedItem = item;
@@ -109,7 +111,14 @@ export default {
         },
         OkClicked() {
             if (this.selectedItem.customer_id !== undefined) {
-                alert('Editing not yet implimented');
+                if (this.IsValidCustomerObject(this.selectedItem)) {
+                    dataService.updateCustomer(this.selectedItem).then(() => {
+                        this.getAccounts();
+                    });
+                } else {
+                    alert('Name and Email address required.');
+                    this.getAccounts();
+                }
             } else {
                 let newCustomer = {
                     name: this.selectedItem.name,
@@ -117,11 +126,36 @@ export default {
                     password: 'default'
                 };
 
-                dataService.insertCustomer(newCustomer).then(result => {
-                    console.log(result);
+                if (this.IsValidCustomerObject(newCustomer)) {
+                    dataService.insertCustomer(newCustomer).then(() => {
+                        this.getAccounts();
+                    });
+                } else {
+                    alert('Name and Email address required.');
                     this.getAccounts();
-                });
+                }
             }
+        },
+        IsValidCustomerObject(customerObject) {
+            //console.log(JSON.stringify(customerObject));
+            let c = customerObject;
+            let IsValid = true;
+            if (typeof c === 'undefined') {
+                return false;
+            }
+            if (typeof c.name === 'undefined' || c.name === null) {
+                return false;
+            }
+            if (typeof c.email === 'undefined' || c.name === null) {
+                return false;
+            }
+            if (c.name.length === 0) {
+                return false;
+            }
+            if (c.email.length === 0) {
+                return false;
+            }
+            return IsValid;
         }
     }
 };

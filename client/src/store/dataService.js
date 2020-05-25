@@ -15,6 +15,18 @@ function insertCustomer(customer) {
     return api.post('/customers', customer).then(response => response.data);
 }
 
+function deleteCustomer(customer_id) {
+    return api
+        .delete('/customers/' + customer_id)
+        .then(response => response.data);
+}
+
+function updateCustomer(customer) {
+    return api
+        .patch('/customers/' + customer.customer_id, customer)
+        .then(response => response.data);
+}
+
 function getOpenOrders() {
     return api.get('/orders/nopickup').then(response => response.data);
 }
@@ -59,6 +71,8 @@ module.exports = {
     getMenu,
     login,
     insertCustomer,
+    deleteCustomer,
+    updateCustomer,
     getOpenOrders,
     getMenus,
     getMenuItems,
