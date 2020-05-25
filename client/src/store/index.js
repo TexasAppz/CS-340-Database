@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import dataService from '../store/dataService';
+import dataService from '../dataServices';
 /*eslint no-unused-vars: "off"*/
 
 export default new Vuex.Store({
@@ -135,7 +135,7 @@ export default new Vuex.Store({
             }
         },
         setOrder(context, payload) {
-            dataService.getOrder(payload).then(function(result) {
+            dataService.orders.getOrder(payload).then(function(result) {
                 context.commit('SET_CURRENT_ORDER_ID', result.order_id);
                 context.commit('SET_CURRENT_CUSTOMER', result.customer[0]);
                 context.commit('SET_FULL_CART', result.order_items);

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import dataService from '../store/dataService';
+import dataService from '../dataServices';
 
 export default {
     data() {
@@ -25,7 +25,7 @@ export default {
     asyncComputed: {
         entireMenu: {
             get() {
-                return dataService.getMenu(this.$route.params.id);
+                return dataService.menus.getMenu(this.$route.params.id);
             },
             default: { name: '' }
         }

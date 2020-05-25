@@ -106,7 +106,7 @@
 <script>
 //import store from '@/store/index';
 // import router from '@/router/index';
-import dataService from '../../store/dataService';
+import dataService from '../../dataServices';
 
 export default {
     data() {
@@ -138,10 +138,10 @@ export default {
     },
     asyncComputed: {
         menuItems: function() {
-            return dataService.getMenuItems();
+            return dataService.menuItems.getMenuItems();
         },
         meuns: function() {
-            return dataService.getMenus();
+            return dataService.menus.getMenus();
         }
     },
     methods: {

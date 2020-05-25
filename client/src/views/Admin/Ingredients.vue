@@ -82,7 +82,7 @@
 <script>
 // import store from '@/store/index';
 // import router from '@/router/index';
-import dataService from '../../store/dataService';
+import dataService from '../../dataServices';
 
 export default {
     data() {
@@ -104,7 +104,7 @@ export default {
     },
     asyncComputed: {
         ingredients: function() {
-            return dataService.getIngredients();
+            return dataService.ingredients.getIngredients();
         }
     },
     computed: {

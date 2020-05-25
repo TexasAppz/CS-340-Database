@@ -66,7 +66,7 @@
 <script>
 // import store from '@/store/index';
 //import router from '@/router/index';
-import dataService from '../../store/dataService';
+import dataService from '../../dataServices';
 
 export default {
     data() {
@@ -90,12 +90,12 @@ export default {
     },
     methods: {
         getAccounts() {
-            dataService.getAccounts().then(result => {
+            dataService.customers.getAccounts().then(result => {
                 this.accounts = result;
             });
         },
         deleteItem(item) {
-            dataService.deleteCustomer(item.customer_id).then(() => {
+            dataService.customers.deleteCustomer(item.customer_id).then(() => {
                 this.getAccounts();
             });
         },
@@ -112,9 +112,11 @@ export default {
         OkClicked() {
             if (this.selectedItem.customer_id !== undefined) {
                 if (this.IsValidCustomerObject(this.selectedItem)) {
-                    dataService.updateCustomer(this.selectedItem).then(() => {
-                        this.getAccounts();
-                    });
+                    dataService.customers
+                        .updateCustomer(this.selectedItem)
+                        .then(() => {
+                            this.getAccounts();
+                        });
                 } else {
                     alert('Name and Email address required.');
                     this.getAccounts();
@@ -127,9 +129,11 @@ export default {
                 };
 
                 if (this.IsValidCustomerObject(newCustomer)) {
-                    dataService.insertCustomer(newCustomer).then(() => {
-                        this.getAccounts();
-                    });
+                    dataService.customers
+                        .insertCustomer(newCustomer)
+                        .then(() => {
+                            this.getAccounts();
+                        });
                 } else {
                     alert('Name and Email address required.');
                     this.getAccounts();

@@ -54,11 +54,7 @@
 </template>
 
 <script>
-// import store from '@/store/index';
-// import router from '@/router/index';
-import dataService from '../../store/dataService';
-//const axios = require('axios').default;
-//const api = axios.create({ baseURL: 'http://localhost:5150' });
+import dataService from '../../dataServices';
 
 export default {
     data() {
@@ -72,7 +68,7 @@ export default {
     },
     asyncComputed: {
         menus() {
-            return dataService.getMenus();
+            return dataService.menus.getMenus();
         }
     },
     methods: {

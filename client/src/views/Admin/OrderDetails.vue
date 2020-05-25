@@ -92,7 +92,7 @@
 
 <script>
 import store from '@/store/index';
-import dataService from '../../store/dataService';
+import dataService from '../../dataServices';
 
 export default {
     data() {
@@ -158,7 +158,7 @@ export default {
     asyncComputed: {
         menuItems: function() {
             let rtn = [];
-            dataService.getMenuItems().then(function(data) {
+            dataService.menuItems.getMenuItems().then(data => {
                 for (let i = 0; i < data.length; i++) {
                     rtn.push({
                         text: data[i].name + ' (' + data[i].price + ')',

@@ -134,7 +134,7 @@
 import store from '@/store/index';
 import { mapState } from 'vuex';
 import router from '@/router/index';
-import dataService from './store/dataService';
+import dataService from './dataServices';
 
 export default {
     //name: 'main',
@@ -159,7 +159,7 @@ export default {
     },
     asyncComputed: {
         menus() {
-            return dataService.getMenus();
+            return dataService.menus.getMenus();
         }
     },
     methods: {

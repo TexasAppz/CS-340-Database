@@ -61,7 +61,7 @@
 
 // import store from '@/store/index';
 import router from '@/router/index';
-import dataService from '../../store/dataService';
+import dataService from '../../dataServices';
 
 export default {
     data() {
@@ -79,7 +79,7 @@ export default {
     },
     asyncComputed: {
         openOrders: function() {
-            return dataService.getOpenOrders();
+            return dataService.orders.getOpenOrders();
         }
     },
     methods: {

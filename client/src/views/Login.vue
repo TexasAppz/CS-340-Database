@@ -37,7 +37,7 @@
 
 import store from '@/store/index';
 import router from '@/router/index';
-import dataService from '../store/dataService';
+import dataService from '../dataServices';
 
 export default {
     name: 'Login',
@@ -53,7 +53,7 @@ export default {
         login(e) {
             event.preventDefault();
             if (this.formIsValid()) {
-                dataService.login(this.username).then(result => {
+                dataService.customers.login(this.username).then(result => {
                     if (result.customer_id != undefined) {
                         if (result.password === this.password) {
                             store.dispatch('setCustomer', result);
