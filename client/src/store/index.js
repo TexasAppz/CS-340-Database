@@ -11,6 +11,7 @@ export default new Vuex.Store({
     state: {
         user: null,
         order_id: null,
+        status: null,
         customer: null,
         cart: [],
         cartSummary: {
@@ -38,16 +39,6 @@ export default new Vuex.Store({
             return state.cart;
         },
         currentCartSummary: function(state) {
-            state.cartSummary.subTotal = 0;
-            for (let i = 0; i < state.cart.length; ++i) {
-                state.cartSummary.subTotal +=
-                    state.cart[i].qty * state.cart[i].price;
-            }
-
-            state.cartSummary.tax = state.cartSummary.subTotal * 0.075;
-            state.cartSummary.grandTotal =
-                state.cartSummary.subTotal + state.cartSummary.tax;
-
             return state.cartSummary;
         }
     },
@@ -93,6 +84,9 @@ export default new Vuex.Store({
             state.cartSummary.grandTotal =
                 state.cartSummary.subTotal + state.cartSummary.tax;
         },
+        UPDATE_ORDER_STATUS(state, payload) {
+            state.status = payload;
+        },
         SET_CURRENT_CUSTOMER(state, payload) {
             state.customer = payload;
         },
@@ -107,6 +101,9 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        setOrderStatus(context, payload) {
+            context.commit('UPDATE_ORDER_STATUS', payload);
+        },
         setShowCartIcon(context, payload) {
             context.commit('UPDATE_SHOWCARTICON', payload);
         },
@@ -136,6 +133,7 @@ export default new Vuex.Store({
         },
         setOrder(context, payload) {
             dataService.orders.getOrder(payload).then(function(result) {
+                context.commit('UPDATE_ORDER_STATUS', result.status);
                 context.commit('SET_CURRENT_ORDER_ID', result.order_id);
                 context.commit('SET_CURRENT_CUSTOMER', result.customer[0]);
                 context.commit('SET_FULL_CART', result.order_items);

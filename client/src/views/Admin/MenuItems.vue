@@ -40,14 +40,14 @@
         </div>
 
         <div>
-            <b-modal id="modalForm1" :title="formTitle">
+            <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
                 <b-form>
                     <b-form-input
                         id="input-name"
                         type="text"
                         placeholder="Name"
                         style="margin:8px;"
-                        :value="selectedItem.name"
+                        v-model="selectedItem.name"
                         required
                     >
                     </b-form-input>
@@ -59,44 +59,17 @@
                         step="0.01"
                         min="1"
                         max="25"
-                        :value="selectedItem.price"
+                        v-model="selectedItem.price"
                         required
                     >
                     </b-form-input>
                     <fieldset style="margin-left:20px;">
                         <legend>On Menu</legend>
-                        <input
-                            type="radio"
-                            name="menu_id"
-                            value="1"
+                        <b-form-select
                             v-model="selectedItem.menu_id"
-                        />
-                        <label for="one">Breakfast</label>
-                        <br />
-                        <input
-                            type="radio"
-                            name="menu_id"
-                            value="2"
-                            v-model="selectedItem.menu_id"
-                        />
-                        <label for="two">Lunch</label>
-                        <br />
-                        <input
-                            type="radio"
-                            name="menu_id"
-                            value="3"
-                            v-model="selectedItem.menu_id"
-                        />
-                        <label for="two">Dinner</label>
-                        <br />
-                        <input
-                            type="radio"
-                            name="menu_id"
-                            value=""
-                            v-model="selectedItem.menu_id"
-                        />
-                        <label for="two">None</label>
-
+                            :options="menus"
+                            style="margin-right:10px"
+                        ></b-form-select>
                         <div
                             style="color:red;text-align:center"
                             v-if="selectedItem.menu_item_id"
@@ -155,13 +128,21 @@ export default {
     },
     methods: {
         getMenus() {
-            dataService.menus.getMenus().then(result => {
-                this.menus = result;
+            dataService.menus.getMenus().then(data => {
+                let rtn = [];
+                rtn.push({ text: 'None', value: null });
+                for (let i = 0; i < data.length; i++) {
+                    rtn.push({
+                        text: data[i].name,
+                        value: data[i].menu_id
+                    });
+                }
+                this.menus = rtn;
             });
         },
         getMenuItems() {
-            dataService.menuItems.getMenuItems().then(result => {
-                this.menuItems = result;
+            dataService.menuItems.getMenuItems().then(data => {
+                this.menuItems = data;
             });
         },
         deleteItem(item) {
@@ -173,10 +154,46 @@ export default {
             this.$bvModal.show('modalForm1');
         },
         showModalForm() {
-            this.selectedItem = {};
+            this.selectedItem = { menu_id: null };
             this.formTitle = 'Add New Menu Item';
             this.$bvModal.show('modalForm1');
+        },
+        OkClicked() {
+            if (this.selectedItem.menu_item_id !== undefined) {
+                //Edit Menu Item
+                if (this.IsValidObject(this.selectedItem)) {
+                    alert('TODO: Update menu');
+                } else {
+                    alert('Invalid Vaid');
+                    this.getMenus();
+                }
+            } else {
+                //Add New Menu Item
+                console.log(this.selectedItem);
+                if (this.IsValidObject(this.selectedItem)) {
+                    dataService.menuItems
+                        .insertMenuItem(this.selectedItem)
+                        .then(() => {
+                            this.getMenuItems();
+                        });
+                } else {
+                    alert('Invalid Form');
+                    this.getMenuItems();
+                }
+            }
+        },
+        IsValidObject(obj) {
+            if (obj) {
+                return true;
+            }
         }
     }
 };
+
+/*
+req.body.menu_item_id,
+req.body.menu_id,
+req.body.name,
+req.body.price,
+*/
 </script>
