@@ -74,8 +74,7 @@ router.get("/menu_item/:menuItemId", function (req, res, next) {
   });
 });
 
-// POST /ingredients/
-// Add New Menu Form: Create a new ingredient given a new name
+//Inserts new Ingredients record
 router.post("/", function (req, res, next) {
   let sqlQuery = "INSERT INTO Ingredients (name) VALUES (?)";
   let sqlParams = [req.body.name];
@@ -89,14 +88,45 @@ router.post("/", function (req, res, next) {
         returnMsg.message = err.sqlMessage;
         res.end(JSON.stringify(returnMsg));
       } else {
-        returnMsg.order_id = result.insertId;
+        returnMsg.ingredient_id = result.insertId;
         res.end(JSON.stringify(returnMsg));
       }
     });
   } else {
     returnMsg.status_code = 0;
     returnMsg.message = "Invalid data";
+    res.end(JSON.stringify(returnMsg));
   }
+});
+
+// delete /ingredients/:id
+// Deletes a row from the database for the table Customers
+router.delete("/:ingredientid", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Ingredients WHERE ingredientid = ?";
+  let getData = req.params.ingredientid;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
+// Patch /ingredients/:ingredientid
+// Update the provided values for a specific row in the Menu table
+router.patch("/:ingredientid", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Ingredients SET ? WHERE menu_id = " + [req.params.ingredientid],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
 });
 
 //Required to work!!!!!

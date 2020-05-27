@@ -17,11 +17,9 @@ router.get("/", function (req, res, next) {
   });
 });
 
-
 //Gets all of the data for a given menu
 router.get("/:id", function (req, res, next) {
-  let sqlQuery = 
-  `
+  let sqlQuery = `
     SELECT 
       m.menu_id, 
       m.name menu_name, 
@@ -95,6 +93,61 @@ router.get("/:id", function (req, res, next) {
     // Return the whole menu
     res.end(JSON.stringify(menu));
   });
+});
+
+//Inserts new menu record
+router.post("/", function (req, res, next) {
+  let sqlQuery = "INSERT INTO Menus (name) VALUES (?)";
+  let sqlParams = [req.body.name];
+  let isValid = true; //Could be used for a validation of the parameters
+
+  let returnMsg = {};
+  if (isValid) {
+    mysql.pool.query(sqlQuery, sqlParams, function (err, result) {
+      if (err) {
+        returnMsg.status_code = 999;
+        returnMsg.message = err.sqlMessage;
+        res.end(JSON.stringify(returnMsg));
+      } else {
+        returnMsg.menu_id = result.insertId;
+        res.end(JSON.stringify(returnMsg));
+      }
+    });
+  } else {
+    returnMsg.status_code = 0;
+    returnMsg.message = "Invalid data";
+    res.end(JSON.stringify(returnMsg));
+  }
+});
+
+// delete /menus/:id
+// Deletes a row from the database for the table Customers
+router.delete("/:menuid", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Menus WHERE menuid = ?";
+  let getData = req.params.menuid;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
+// Patch /menus/:menuid
+// Update the provided values for a specific row in the Menu table
+router.patch("/:menuid", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Menus SET ? WHERE menu_id = " + [req.params.menuid],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
 });
 
 module.exports = router;
