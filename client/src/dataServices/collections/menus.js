@@ -10,13 +10,18 @@ module.exports = function(api) {
         }
     }
 
-    function insertMenu(customer) {
-        return api.post('/menus', customer).then(response => response.data);
+    function insertMenu(menu) {
+        return api.post('/menus', menu).then(response => response.data);
+    }
+
+    function deleteMenu(menu_id) {
+        return api.delete('/menus/' + menu_id).then(response => response.data);
     }
 
     return {
         getMenus,
         getMenu,
-        insertMenu
+        insertMenu,
+        deleteMenu
     };
 };

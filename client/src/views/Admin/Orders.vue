@@ -41,15 +41,14 @@
             </b-table>
         </div>
         <div>
-            <b-modal id="modal-1" title="New Order Form">
+            <b-modal id="modal-1" title="New Order Form" @ok="OkClicked()">
                 <b-form>
                     <span>Customer Name</span>
-                    <b-form-input
-                        id="input-1"
-                        type="text"
-                        placeholder="this will be a dropdown menu of customers"
-                        required
-                    ></b-form-input
+                    <b-form-select
+                        v-model="selectedCustomer"
+                        :options="customers"
+                        style="margin-right:10px"
+                    ></b-form-select
                 ></b-form>
             </b-modal>
         </div>
@@ -67,7 +66,10 @@ export default {
     data() {
         //view model
         return {
+            openOrders: [],
             name: 'Orders (Not Yet Picked Up)',
+            selectedCustomer: null,
+            customers: [],
             fields: [
                 'Edit',
                 { key: 'order_id', label: 'Order Number' },
@@ -77,22 +79,46 @@ export default {
             ]
         };
     },
-    asyncComputed: {
-        openOrders: function() {
-            return dataService.orders.getOpenOrders();
-        }
-    },
     methods: {
         deleteItem(item) {
             alert('Order number ' + item.order_id + ' would be deleted');
             console.log(item);
         },
         editItem(item) {
-            //console.log(item);
             router
                 .replace({ path: `/Admin/OrderDetails/${item.order_id}` })
                 .catch(err => {});
+        },
+        getCustomers() {
+            dataService.customers.getAccounts().then(data => {
+                let rtn = [];
+                for (let i = 0; i < data.length; i++) {
+                    rtn.push({
+                        text: data[i].name,
+                        value: data[i]
+                    });
+                }
+                this.customers = rtn;
+            });
+        },
+        getOpenOrders() {
+            dataService.orders.getOpenOrders().then(result => {
+                this.openOrders = result;
+            });
+        },
+        OkClicked() {
+            if (this.selectedCustomer) {
+                dataService.orders
+                    .insertOrder(this.selectedCustomer)
+                    .then(() => {
+                        this.getOpenOrders();
+                    });
+            }
         }
+    },
+    mounted() {
+        this.getOpenOrders();
+        this.getCustomers();
     }
 };
 </script>
