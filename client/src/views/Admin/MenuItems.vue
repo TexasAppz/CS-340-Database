@@ -40,7 +40,7 @@
         </div>
 
         <div>
-            <b-modal id="modalForm1" title="Add New Menu Item">
+            <b-modal id="modalForm1" :title="formTitle">
                 <b-form>
                     <b-form-input
                         id="input-name"
@@ -96,6 +96,16 @@
                             v-model="selectedItem.menu_id"
                         />
                         <label for="two">None</label>
+
+                        <div
+                            style="color:red;text-align:center"
+                            v-if="selectedItem.menu_item_id"
+                        >
+                            <hr />
+                            Still working on having and editable ingredients
+                            list here<br /><br />
+                            This will be one of our M:M
+                        </div>
                     </fieldset>
                 </b-form>
             </b-modal>
@@ -115,6 +125,7 @@ export default {
             menus: [],
             menuItems: [],
             selectedItem: {},
+            formTitle: '',
             name: 'Menu Item',
             fields: [
                 'Edit',
@@ -158,10 +169,12 @@ export default {
         },
         editItem(item) {
             this.selectedItem = item;
+            this.formTitle = 'Edit Menu Item';
             this.$bvModal.show('modalForm1');
         },
         showModalForm() {
             this.selectedItem = {};
+            this.formTitle = 'Add New Menu Item';
             this.$bvModal.show('modalForm1');
         }
     }

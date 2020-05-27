@@ -11,8 +11,29 @@ module.exports = function(api) {
                 .then(response => response.data);
         }
     }
+
+    function insertIngredient(ingredient) {
+        return api
+            .post('/ingredients', ingredient)
+            .then(response => response.data);
+    }
+
+    function deleteIngredient(ingredient_id) {
+        return api
+            .delete('/ingredients/' + ingredient_id)
+            .then(response => response.data);
+    }
+
+    function updateIngredient(ingredient) {
+        return api
+            .patch('/ingredients/' + ingredient.ingredient_id, ingredient)
+            .then(response => response.data);
+    }
     return {
         getIngredients,
-        getMenuItemIngredients
+        getMenuItemIngredients,
+        insertIngredient,
+        deleteIngredient,
+        updateIngredient
     };
 };

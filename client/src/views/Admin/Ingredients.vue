@@ -65,7 +65,7 @@
             ></b-pagination>
         </div>
         <div>
-            <b-modal id="modalForm1" :title="formTitle">
+            <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
                 <b-form>
                     <b-form-input
                         id="input-1"
@@ -122,7 +122,11 @@ export default {
             });
         },
         deleteItem(item) {
-            alert(item.name + ' would be deleted');
+            dataService.ingredients
+                .deleteIngredient(item.ingredient_id)
+                .then(() => {
+                    this.getIngredients();
+                });
         },
         editItem(item) {
             this.selectedItem = item;
@@ -133,6 +137,50 @@ export default {
             this.selectedItem = {};
             this.formTitle = 'Add New Ingredient';
             this.$bvModal.show('modalForm1');
+        },
+        OkClicked() {
+            if (this.selectedItem.ingredient_id !== undefined) {
+                if (this.IsValidObject(this.selectedItem)) {
+                    dataService.ingredients
+                        .updateIngredient(this.selectedItem)
+                        .then(() => {
+                            this.getIngredients();
+                        });
+                } else {
+                    alert('Name required.');
+                    this.getIngredients();
+                }
+            } else {
+                let newObj = {
+                    name: this.selectedItem.name
+                };
+
+                if (this.IsValidObject(newObj)) {
+                    dataService.ingredients
+                        .insertIngredient(newObj)
+                        .then(() => {
+                            this.getIngredients();
+                        });
+                } else {
+                    alert('Name required.');
+                    this.getIngredients();
+                }
+            }
+        },
+        IsValidObject(newObj) {
+            //console.log(JSON.stringify(customerObject));
+            let c = newObj;
+            let IsValid = true;
+            if (typeof c === 'undefined') {
+                return false;
+            }
+            if (typeof c.name === 'undefined' || c.name === null) {
+                return false;
+            }
+            if (c.name.length === 0) {
+                return false;
+            }
+            return IsValid;
         }
     }
 };

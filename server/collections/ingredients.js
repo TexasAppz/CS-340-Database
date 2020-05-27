@@ -102,7 +102,7 @@ router.post("/", function (req, res, next) {
 // delete /ingredients/:id
 // Deletes a row from the database for the table Customers
 router.delete("/:ingredientid", function (req, res, next) {
-  let sqlQuery = "DELETE FROM Ingredients WHERE ingredientid = ?";
+  let sqlQuery = "DELETE FROM Ingredients WHERE ingredient_id = ?";
   let getData = req.params.ingredientid;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
@@ -117,7 +117,8 @@ router.delete("/:ingredientid", function (req, res, next) {
 // Update the provided values for a specific row in the Menu table
 router.patch("/:ingredientid", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Ingredients SET ? WHERE menu_id = " + [req.params.ingredientid],
+    "UPDATE Ingredients SET ? WHERE ingredient_id = " +
+      [req.params.ingredientid],
     req.body,
     function (err, result) {
       if (err) {

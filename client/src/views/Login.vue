@@ -51,7 +51,7 @@ export default {
     },
     methods: {
         login(e) {
-            event.preventDefault();
+            e.preventDefault();
             if (this.formIsValid()) {
                 dataService.customers.login(this.username).then(result => {
                     if (result.customer_id != undefined) {
