@@ -88,6 +88,7 @@ export default {
     data() {
         //view model
         return {
+            ingredients: [],
             selectedItem: {},
             formTitle: '',
             name: 'Ingredients',
@@ -102,11 +103,6 @@ export default {
             sortDesc: false
         };
     },
-    asyncComputed: {
-        ingredients: function() {
-            return dataService.ingredients.getIngredients();
-        }
-    },
     computed: {
         rows() {
             let rtn = 0;
@@ -116,7 +112,15 @@ export default {
             return rtn;
         }
     },
+    mounted() {
+        this.getIngredients();
+    },
     methods: {
+        getIngredients() {
+            dataService.ingredients.getIngredients().then(result => {
+                this.ingredients = result;
+            });
+        },
         deleteItem(item) {
             alert(item.name + ' would be deleted');
         },

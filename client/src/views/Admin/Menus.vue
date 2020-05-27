@@ -39,7 +39,7 @@
             </b-table>
         </div>
         <div>
-            <b-modal id="modalForm1" :title="formTitle">
+            <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
                 <b-form>
                     <b-form-input
                         id="input-1"
@@ -60,18 +60,22 @@ export default {
     data() {
         //view model
         return {
+            menus: [],
             selectedItem: {},
             formTitle: '',
             name: 'Menus',
             fields: ['Edit', { key: 'name', label: 'Menu Name' }, 'Delete']
         };
     },
-    asyncComputed: {
-        menus() {
-            return dataService.menus.getMenus();
-        }
+    mounted() {
+        this.getMenus();
     },
     methods: {
+        getMenus() {
+            dataService.menus.getMenus().then(result => {
+                this.menus = result;
+            });
+        },
         deleteItem(item) {
             alert(item.name + ' would be deleted');
         },
@@ -84,6 +88,44 @@ export default {
             this.selectedItem = {};
             this.formTitle = 'Add New Menu';
             this.$bvModal.show('modalForm1');
+        },
+        OkClicked() {
+            if (this.selectedItem.menu_id !== undefined) {
+                if (this.IsValidMenuObject(this.selectedItem)) {
+                    alert('TODO: Update menu');
+                } else {
+                    alert('Name required.');
+                    this.getMenus();
+                }
+            } else {
+                let newMenu = {
+                    name: this.selectedItem.name
+                };
+
+                if (this.IsValidMenuObject(newMenu)) {
+                    dataService.menus.insertMenu(newMenu).then(() => {
+                        this.getMenus();
+                    });
+                } else {
+                    alert('Name required.');
+                    this.getMenus();
+                }
+            }
+        },
+        IsValidMenuObject(newMenu) {
+            //console.log(JSON.stringify(customerObject));
+            let c = newMenu;
+            let IsValid = true;
+            if (typeof c === 'undefined') {
+                return false;
+            }
+            if (typeof c.name === 'undefined' || c.name === null) {
+                return false;
+            }
+            if (c.name.length === 0) {
+                return false;
+            }
+            return IsValid;
         }
     }
 };

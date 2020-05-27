@@ -9,8 +9,14 @@ module.exports = function(api) {
             return api.get('/menus/' + menuId).then(response => response.data);
         }
     }
+
+    function insertMenu(customer) {
+        return api.post('/menus', customer).then(response => response.data);
+    }
+
     return {
         getMenus,
-        getMenu
+        getMenu,
+        insertMenu
     };
 };

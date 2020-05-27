@@ -112,6 +112,8 @@ export default {
     data() {
         //view model
         return {
+            menus: [],
+            menuItems: [],
             selectedItem: {},
             name: 'Menu Item',
             fields: [
@@ -136,15 +138,21 @@ export default {
             iFields: ['name', 'Delete']
         };
     },
-    asyncComputed: {
-        menuItems: function() {
-            return dataService.menuItems.getMenuItems();
-        },
-        meuns: function() {
-            return dataService.menus.getMenus();
-        }
+    mounted() {
+        this.getMenus();
+        this.getMenuItems();
     },
     methods: {
+        getMenus() {
+            dataService.menus.getMenus().then(result => {
+                this.menus = result;
+            });
+        },
+        getMenuItems() {
+            dataService.menuItems.getMenuItems().then(result => {
+                this.menuItems = result;
+            });
+        },
         deleteItem(item) {
             alert(item.name + ' would be deleted.');
         },
