@@ -159,7 +159,7 @@ export default {
     },
     asyncComputed: {
         menus() {
-            return dataService.menus.getMenus();
+            return dataService.menus.getNavMenus();
         }
     },
     methods: {

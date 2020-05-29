@@ -17,6 +17,22 @@ router.get("/", function (req, res, next) {
   });
 });
 
+// Used for the navigation drop down menu
+router.get("/nav", function (req, res, next) {
+  let sqlQuery = `
+    SELECT distinct m.*
+    FROM Menus m
+    join Menu_Items mi on m.menu_id = mi.menu_id;`;
+  mysql.pool.query(sqlQuery, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+
+    res.end(JSON.stringify(result));
+  });
+});
+
 //Gets all of the data for a given menu
 router.get("/:id", function (req, res, next) {
   let sqlQuery = `
@@ -29,10 +45,10 @@ router.get("/:id", function (req, res, next) {
       i.ingredient_id, 
       i.name ingredient_name 
     FROM 
-      Menus m JOIN 
-      Menu_Items mi on m.menu_id = mi.menu_id JOIN 
-      Item_Ingredients ii on mi.menu_item_id = ii.menu_item_id JOIN 
-      Ingredients i on ii.ingredient_id = i.ingredient_id 
+      Menus m 
+      JOIN Menu_Items mi on m.menu_id = mi.menu_id 
+      left outer JOIN Item_Ingredients ii on mi.menu_item_id = ii.menu_item_id 
+      left outer JOIN Ingredients i on ii.ingredient_id = i.ingredient_id 
     WHERE 
       m.menu_id = ? 
     `;
@@ -56,7 +72,7 @@ router.get("/:id", function (req, res, next) {
     for (let i = 0; i < result.length; ++i) {
       //Create a new menu item
       let obj = {
-        menuitem_id: result[i].menu_item_id,
+        menu_item_id: result[i].menu_item_id,
         name: result[i].menu_item_name,
         price: result[i].price,
         ingredients: [],
@@ -83,7 +99,7 @@ router.get("/:id", function (req, res, next) {
 
       //Find the menu item it belongs to
       let menuItem = menu.items.find(function (element) {
-        return element.menuitem_id == result[i].menu_item_id;
+        return element.menu_item_id == result[i].menu_item_id;
       });
 
       //add the ingredient to the menu item

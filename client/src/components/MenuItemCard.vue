@@ -12,7 +12,7 @@
             <b-col md="6">
                 <b-card-body>
                     <h2>{{ menuItem.name }}</h2>
-                    <b-card-text>
+                    <b-card-text v-show="listWithCommas(menuItem.ingredients)">
                         This menu item includes
                         <span>
                             {{ listWithCommas(menuItem.ingredients) }}
@@ -69,12 +69,13 @@ export default {
                     }
                 }
             }
+            //console.log(rtn);
             return rtn;
         },
         addToCart() {
             store
                 .dispatch('addToCart', {
-                    menuitem_id: this.menuItem.menuitem_id,
+                    menu_item_id: this.menuItem.menu_item_id,
                     name: this.menuItem.name,
                     price: this.menuItem.price,
                     qty: this.qty

@@ -4,6 +4,10 @@ module.exports = function(api) {
         return api.get('/menus').then(response => response.data);
     }
 
+    function getNavMenus() {
+        return api.get('/menus/nav').then(response => response.data);
+    }
+
     function getMenu(menuId) {
         if (typeof menuId !== 'undefined') {
             return api.get('/menus/' + menuId).then(response => response.data);
@@ -20,6 +24,7 @@ module.exports = function(api) {
 
     return {
         getMenus,
+        getNavMenus,
         getMenu,
         insertMenu,
         deleteMenu

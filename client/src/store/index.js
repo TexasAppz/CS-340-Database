@@ -67,8 +67,9 @@ export default new Vuex.Store({
             }
         },
         UPDATE_CART_ITEM(state, payload) {
+            console.log(payload);
             for (let i = 0; i < state.cart.length; ++i) {
-                if (state.cart[i].menuitem_id === payload.menuitem_id) {
+                if (state.cart[i].menu_item_id === payload.menu_item_id) {
                     state.cart[i].qty = payload.qty;
                 }
             }
