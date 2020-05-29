@@ -164,4 +164,34 @@ router.post("/", function (req, res, next) {
   }
 });
 
+// delete /orders/:orderid
+// Deletes a row from the database for the table Orders
+router.delete("/:orderid", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Orders WHERE order_id = ?";
+  let getData = req.params.orderid;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
+// Patch /menus/:orderid
+// Update the provided values for a specific row in the Orders table
+router.patch("/:orderid", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Orders SET ? WHERE order_id = " + [req.params.orderid],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
 module.exports = router;

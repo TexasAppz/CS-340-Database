@@ -153,4 +153,34 @@ router.post("/", function (req, res, next) {
   }
 });
 
+// delete /menu_items/:menuitemid
+// Deletes a row from the database for the table Menu_Items
+router.delete("/:menuitemid", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Menu_Items WHERE menu_item_id = ?";
+  let getData = req.params.menuitemid;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
+// Patch /menus/:menuitemid
+// Update the provided values for a specific row in the Menu_Items table
+router.patch("/:menuitemid", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Menu_Items SET ? WHERE menu_item_id = " + [req.params.menuitemid],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
 module.exports = router;
