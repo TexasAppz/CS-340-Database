@@ -62,9 +62,9 @@ router.get("/:orderId", function (req, res, next) {
 router.post("/", function (req, res, next) {
     let sqlQuery = 
         `INSERT INTO Order_Items 
-        (order_id, order_item_id)
+        (order_id, menu_item_id)
         VALUES (?,?)`;
-    let sqlParams = [req.body.order_id, req.body.order_item_id];
+    let sqlParams = [req.body.order_id, req.body.menu_item_id];
     let isValid = true; //Could be used for a validation of the parameters
 
     let returnMsg = {};
@@ -75,7 +75,7 @@ router.post("/", function (req, res, next) {
                 returnMsg.message = err.sqlMessage;
                 res.end(JSON.stringify(returnMsg));
             } else {
-                returnMsg.order_id = result.insertId;
+                returnMsg.order_item_id = result.insertId;
                 res.end(JSON.stringify(returnMsg));
             }
         });
@@ -84,6 +84,37 @@ router.post("/", function (req, res, next) {
         returnMsg.message = "Invalid data";
         res.end(JSON.stringify(returnMsg));
     }
+});
+
+// delete /order_items/:orderitemid
+// Deletes a row from the database for the table Order_Items
+router.delete("/:orderitemid", function (req, res, next) {
+    let sqlQuery = "DELETE FROM Order_Items WHERE order_item_id = ?";
+    let getData = req.params.orderitemid;
+    mysql.pool.query(sqlQuery, getData, function (err, result) {
+        if (err) {
+            next(err);
+            return;
+        }
+        res.end(JSON.stringify(result));
+    });
+});
+
+// Patch /menus/:orderitemid
+// Update the provided values for a specific row in the Order_Items table
+router.patch("/:orderitemid", function (req, res, next) {
+    mysql.pool.query(
+        "UPDATE Order_Items SET ? WHERE order_item_id = " 
+        + [req.params.orderitemid],
+        req.body,
+        function (err, result) {
+            if (err) {
+                next(err);
+                return;
+            }
+            res.end(JSON.stringify(result));
+        }
+    );
 });
 
 module.exports = router;

@@ -3,6 +3,26 @@ let express = require("express");
 let router = express.Router();
 let mysql = require("../dbcon.js");
 
+// GET /item_ingredients
+// Returns all item ingredients
+router.get("/", function (req, res, next) {
+    let sqlQuery = 
+            `SELECT ii.item_ingredient_id, ii.menu_item_id,
+            ii.ingredient_id, ing.name
+            FROM Item_Ingredients ii
+            JOIN Ingredients ing
+                ON(ing.ingredient_id = ii.ingredient_id)
+            ORDER BY ing.name ASC`;
+    mysql.pool.query(sqlQuery, function (err, result) {
+        if (err) {
+            next(err);
+            return;
+        }
+
+        res.end(JSON.stringify(result));
+    });
+});
+
 //Inserts new Item Ingredients
 router.post("/", function (req, res, next) {
     let sqlQuery = `INSERT INTO Item_Ingredients 
@@ -18,7 +38,7 @@ router.post("/", function (req, res, next) {
                 returnMsg.message = err.sqlMessage;
                 res.end(JSON.stringify(returnMsg));
             } else {
-                returnMsg.ingredient_id = result.insertId;
+                returnMsg.item_ingredient_id = result.insertId;
                 res.end(JSON.stringify(returnMsg));
             }
         });
@@ -30,8 +50,8 @@ router.post("/", function (req, res, next) {
 });
 
 //something new
-// delete /item_ingredients/:id
-// Deletes a row from the database for the table Customers
+// delete /item_ingredients/:itemIngredientId
+// Deletes a row from the database for the table Item_Ingredients
 router.delete("/:itemIngredientId", function (req, res, next) {
     let sqlQuery = "DELETE FROM Item_Ingredients WHERE item_ingredient_id = ?";
     let getData = req.params.itemIngredientId;
@@ -43,5 +63,23 @@ router.delete("/:itemIngredientId", function (req, res, next) {
         res.end(JSON.stringify(result));
     });
 });
+
+// Patch /item_ingredients/:itemIngredientId
+// Update the provided values for a specific row in the Item_Ingredients table
+router.patch("/:itemIngredientId", function (req, res, next) {
+    mysql.pool.query(
+        "UPDATE Item_Ingredients SET ? WHERE item_ingredient_id = " 
+        + [req.params.itemIngredientId],
+        req.body,
+        function (err, result) {
+            if (err) {
+                next(err);
+                return;
+            }
+            res.end(JSON.stringify(result));
+        }
+    );
+});
+
 
 module.exports = router;

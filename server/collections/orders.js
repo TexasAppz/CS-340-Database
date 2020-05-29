@@ -140,7 +140,6 @@ router.get("/:orderId", function (req, res, next) {
 });
 
 //Inserts new order record given a customer_id
-
 router.post("/", function (req, res, next) {
   let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
   let sqlParams = [req.body.customer_id];
