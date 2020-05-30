@@ -191,19 +191,6 @@ router.delete("/:menuitemid", function (req, res, next) {
   });
 });
 
-// delete /menu_items/isactive/:act
-// Deletes a row from the database for the table Menu_Items for active
-router.delete("/isactive/:act", function (req, res, next) {
-  let sqlQuery = "DELETE FROM Menu_Items WHERE isactive = ?";
-  let getData = req.params.act;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.end(JSON.stringify(result));
-  });
-});
 
 // Patch /menu_Items/:menuitemid
 // Update the provided values for a specific row in the Menu_Items table
@@ -221,11 +208,11 @@ router.patch("/:menuitemid", function (req, res, next) {
   );
 });
 
-// Patch /menu_Items/isactive/:act
-// Update the provided values for a specific row in the Menu_Items table for active
-router.patch("/isactive/:act", function (req, res, next) {
+// Patch /menu_Items/
+// Update the provided values for a specific row in the Menu_Items table
+router.patch("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Menu_Items SET ? WHERE isactive = " + [req.params.act],
+    "UPDATE Menu_Items SET isactive = 0 WHERE menu_item_id = " + [req.params.menu_item_id],
     req.body,
     function (err, result) {
       if (err) {
