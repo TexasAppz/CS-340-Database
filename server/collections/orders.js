@@ -216,7 +216,6 @@ router.delete("/isactive/:act", function (req, res, next) {
   });
 });
 
-
 // Patch /orders/:orderid
 // Update the provided values for a specific row in the Orders table
 router.patch("/:orderid", function (req, res, next) {
@@ -237,8 +236,7 @@ router.patch("/:orderid", function (req, res, next) {
 // Update the provided values for a specific row in the Orders table for active
 router.patch("/isactive/:act", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Orders SET ? WHERE isactive = " + [req.params.act]
-    + " AND order_id = ?" + [req.params.orderid],
+    "UPDATE Orders SET ? WHERE isactive = " + [req.params.act],
     req.body,
     function (err, result) {
       if (err) {

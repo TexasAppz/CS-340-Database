@@ -55,6 +55,30 @@ router.get("/byEmail/:emailAddress", function (req, res, next) {
   });
 });
 
+// GET /customers/isactive/:act
+// Returns all active customers
+router.get("/isactive/:act", function (req, res, next) {
+  let sqlQuery = "SELECT * FROM Customers WHERE isactive = ? ";
+  let getData = req.params.act;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    //If no records returned, send back something indicating that
+    if (result.length > 0) {
+      res.end(JSON.stringify(result));
+    } else {
+      res.end(
+        JSON.stringify({
+          status_code: "100",
+          message: "No Records Found",
+        })
+      );
+    }
+  });
+});
+
 //Inserts new customer record
 router.post("/", function (req, res, next) {
   let sqlQuery = "INSERT INTO Customers (name, email, password) VALUES (?,?,?)";
@@ -78,30 +102,6 @@ router.post("/", function (req, res, next) {
     returnMsg.message = "Invalid data";
     res.end(JSON.stringify(returnMsg));
   }
-});
-
-// GET /customers/isactive/:act
-// Returns all active customers
-router.get("/isactive/:act", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Customers WHERE isactive = ? ";
-  let getData = req.params.act;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    //If no records returned, send back something indicating that
-    if (result.length > 0) {
-      res.end(JSON.stringify(result));
-    } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
-    }
-  });
 });
 
 // delete /customers/:id
