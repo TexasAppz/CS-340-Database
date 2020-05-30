@@ -6,7 +6,9 @@ let mysql = require("../dbcon.js");
 // GET /customers
 // Returns all values from the database for the table Customers
 router.get("/", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Customers ORDER BY customer_id";
+  //let sqlQuery = "SELECT * FROM Customers ORDER BY customer_id";
+  let sqlQuery =
+    "SELECT * FROM Customers WHERE isactive = 1 ORDER BY customer_id";
   mysql.pool.query(sqlQuery, function (err, result) {
     if (err) {
       next(err);
@@ -18,7 +20,7 @@ router.get("/", function (req, res, next) {
 });
 
 // GET /customers/:id
-// Returns all values from the database for the table Customers
+// Returns a specific customer by id
 router.get("/:customerId", function (req, res, next) {
   let sqlQuery = "SELECT * FROM Customers WHERE customer_id = ?";
   let getData = req.params.customerId;
@@ -32,7 +34,7 @@ router.get("/:customerId", function (req, res, next) {
 });
 
 // GET /customers/byEmail/:emailAddress
-// Returns all values from the database for the table Customers
+// Returns a specific customer by email
 router.get("/byEmail/:emailAddress", function (req, res, next) {
   let sqlQuery = "SELECT * FROM Customers WHERE email = ?";
   let getData = req.params.emailAddress;
@@ -55,6 +57,8 @@ router.get("/byEmail/:emailAddress", function (req, res, next) {
   });
 });
 
+// *************  this route is not needed ****************
+/*
 // GET /customers/isactive/:act
 // Returns all active customers
 router.get("/isactive/:act", function (req, res, next) {
@@ -78,10 +82,13 @@ router.get("/isactive/:act", function (req, res, next) {
     }
   });
 });
+*/
 
 //Inserts new customer record
 router.post("/", function (req, res, next) {
-  let sqlQuery = "INSERT INTO Customers (name, email, password) VALUES (?,?,?)";
+  //let sqlQuery = "INSERT INTO Customers (name, email, password) VALUES (?,?,?)";
+  let sqlQuery =
+    "INSERT INTO Customers (name, email, password, isactive) VALUES (?,?,?,1)";
   let sqlParams = [req.body.name, req.body.email, req.body.password];
   let isValid = true; //Could be used for a validation of the parameters
 
@@ -104,6 +111,8 @@ router.post("/", function (req, res, next) {
   }
 });
 
+/*
+// *************  this route is not needed. we do not intend to actually delete a customer ****************
 // delete /customers/:id
 // Deletes a row from the database for the table Customers
 router.delete("/:customerId", function (req, res, next) {
@@ -117,13 +126,16 @@ router.delete("/:customerId", function (req, res, next) {
     res.end(JSON.stringify(result));
   });
 });
-
+*/
 
 // Patch /customers/:customer_id
 // Update the provided values for a specific row in the Customers table
-router.patch("/:customer_id", function (req, res, next) {
+
+//router.patch("/:customer_id", function (req, res, next) {
+router.patch("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Customers SET ? WHERE customer_id = " + [req.params.customer_id],
+    //"UPDATE Customers SET ? WHERE customer_id = " + [req.params.customer_id],
+    "UPDATE Customers SET ? WHERE customer_id = " + [req.body.customer_id],
     req.body,
     function (err, result) {
       if (err) {
@@ -135,11 +147,14 @@ router.patch("/:customer_id", function (req, res, next) {
   );
 });
 
-// Patch /customers/
-// Update the provided values for a specific row in the Menu_Items table
-router.patch("/", function (req, res, next) {
+// Delete /customers/
+// Soft-Delete the customer by setting the isactive flag to 0
+//router.patch("/", function (req, res, next) {
+router.delete("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Customers SET isactive = 0 WHERE customer_id = " + [req.params.customer_id],
+    //"UPDATE Customers SET isactive = 0 WHERE customer_id = " + [req.params.customer_id],
+    "UPDATE Customers SET isactive = 0 WHERE customer_id = " +
+      [req.body.customer_id],
     req.body,
     function (err, result) {
       if (err) {
