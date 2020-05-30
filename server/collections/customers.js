@@ -57,36 +57,9 @@ router.get("/byEmail/:emailAddress", function (req, res, next) {
   });
 });
 
-// *************  this route is not needed ****************
-/*
-// GET /customers/isactive/:act
-// Returns all active customers
-router.get("/isactive/:act", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Customers WHERE isactive = ? ";
-  let getData = req.params.act;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    //If no records returned, send back something indicating that
-    if (result.length > 0) {
-      res.end(JSON.stringify(result));
-    } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
-    }
-  });
-});
-*/
-
+// Patch /customers/
 //Inserts new customer record
 router.post("/", function (req, res, next) {
-  //let sqlQuery = "INSERT INTO Customers (name, email, password) VALUES (?,?,?)";
   let sqlQuery =
     "INSERT INTO Customers (name, email, password, isactive) VALUES (?,?,?,1)";
   let sqlParams = [req.body.name, req.body.email, req.body.password];
@@ -111,30 +84,10 @@ router.post("/", function (req, res, next) {
   }
 });
 
-/*
-// *************  this route is not needed. we do not intend to actually delete a customer ****************
-// delete /customers/:id
-// Deletes a row from the database for the table Customers
-router.delete("/:customerId", function (req, res, next) {
-  let sqlQuery = "DELETE FROM Customers WHERE customer_id = ?";
-  let getData = req.params.customerId;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.end(JSON.stringify(result));
-  });
-});
-*/
-
 // Patch /customers/:customer_id
 // Update the provided values for a specific row in the Customers table
-
-//router.patch("/:customer_id", function (req, res, next) {
-router.patch("/", function (req, res, next) {
+router.patch("/:customer_id", function (req, res, next) {
   mysql.pool.query(
-    //"UPDATE Customers SET ? WHERE customer_id = " + [req.params.customer_id],
     "UPDATE Customers SET ? WHERE customer_id = " + [req.body.customer_id],
     req.body,
     function (err, result) {
@@ -149,10 +102,8 @@ router.patch("/", function (req, res, next) {
 
 // Delete /customers/
 // Soft-Delete the customer by setting the isactive flag to 0
-//router.patch("/", function (req, res, next) {
 router.delete("/", function (req, res, next) {
   mysql.pool.query(
-    //"UPDATE Customers SET isactive = 0 WHERE customer_id = " + [req.params.customer_id],
     "UPDATE Customers SET isactive = 0 WHERE customer_id = " +
       [req.body.customer_id],
     req.body,

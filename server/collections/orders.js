@@ -166,7 +166,7 @@ router.get("/:orderId", function (req, res, next) {
 
 //Inserts new order record given a customer_id
 router.post("/", function (req, res, next) {
-  let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
+  let sqlQuery = "INSERT INTO Orders (customer_id, isactive) VALUES (?,1)";
   let sqlParams = [req.body.customer_id];
   let isValid = true; //Could be used for a validation of the parameters
 
@@ -222,7 +222,7 @@ router.patch("/:orderid", function (req, res, next) {
 // Update the provided values for a specific row in the Orders table
 router.patch("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE orders SET isactive = 0 WHERE order_id = " + [req.params.order_id],
+    "UPDATE Orders SET isactive = 0 WHERE order_id = " + [req.params.order_id],
     req.body,
     function (err, result) {
       if (err) {

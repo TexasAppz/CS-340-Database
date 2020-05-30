@@ -148,8 +148,8 @@ router.get("/isactive/:act", function (req, res, next) {
 // and a menu id to associate if applicable.
 router.post("/", function (req, res, next) {
   let sqlQuery = `INSERT INTO Menu_Items 
-        (menu_item_id, menu_id, name, price)
-        VALUES (?,?,?,?)`;
+        (menu_item_id, menu_id, name, price, isactive)
+        VALUES (?,?,?,?,1)`;
   let sqlParams = [
     req.body.menu_item_id,
     req.body.menu_id,
