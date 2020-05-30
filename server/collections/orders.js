@@ -234,4 +234,21 @@ router.patch("/", function (req, res, next) {
   );
 });
 
+// Delete /orders/
+// Soft-Delete the orders by setting the isactive flag to 0
+router.delete("/", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Orders SET isactive = 0 WHERE order_id = " +
+    [req.body.order_id],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
 module.exports = router;

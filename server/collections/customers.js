@@ -100,12 +100,27 @@ router.patch("/:customer_id", function (req, res, next) {
   );
 });
 
+// Patch /customer_id/
+// Update the provided values for a specific row in the Customers table
+router.patch("/", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Customers SET isactive = 0 WHERE customer_id = " + [req.params.customer_id],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
 // Delete /customers/
 // Soft-Delete the customer by setting the isactive flag to 0
 router.delete("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Customers SET isactive = 0 WHERE customer_id = " +
-      [req.body.customer_id],
+    "UPDATE Customers SET isactive = 0 WHERE customer_id = " + [req.body.customer_id],
     req.body,
     function (err, result) {
       if (err) {

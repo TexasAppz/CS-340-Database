@@ -224,4 +224,22 @@ router.patch("/", function (req, res, next) {
   );
 });
 
+
+// Delete /menu_items/
+// Soft-Delete the menu_items by setting the isactive flag to 0
+router.delete("/", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Menu_Items SET isactive = 0 WHERE menu_item_id = " +
+    [req.body.menu_item_id],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
 module.exports = router;
