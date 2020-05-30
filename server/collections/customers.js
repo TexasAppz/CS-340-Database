@@ -80,6 +80,30 @@ router.post("/", function (req, res, next) {
   }
 });
 
+// GET /customers/isactive/:act
+// Returns all active customers
+router.get("/isactive/:act", function (req, res, next) {
+  let sqlQuery = "SELECT * FROM Customers WHERE isactive = ? ";
+  let getData = req.params.act;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    //If no records returned, send back something indicating that
+    if (result.length > 0) {
+      res.end(JSON.stringify(result));
+    } else {
+      res.end(
+        JSON.stringify({
+          status_code: "100",
+          message: "No Records Found",
+        })
+      );
+    }
+  });
+});
+
 // delete /customers/:id
 // Deletes a row from the database for the table Customers
 router.delete("/:customerId", function (req, res, next) {
@@ -94,11 +118,41 @@ router.delete("/:customerId", function (req, res, next) {
   });
 });
 
+// delete /customers/isactive/:act
+// Deletes a row from the database for the table Customers for active
+router.delete("/isactive/:act", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Customers WHERE isactive = ?";
+  let getData = req.params.act;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
 // Patch /customers/:customer_id
 // Update the provided values for a specific row in the Customers table
 router.patch("/:customer_id", function (req, res, next) {
   mysql.pool.query(
     "UPDATE Customers SET ? WHERE customer_id = " + [req.params.customer_id],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
+// Patch /customers/isactive/:act
+// Update the provided values for a specific row in the Orders table for active
+router.patch("/isactive/:act", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Customers SET ? WHERE isactive = " + [req.params.act],
     req.body,
     function (err, result) {
       if (err) {

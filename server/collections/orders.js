@@ -39,6 +39,31 @@ router.get("/new/", function (req, res, next) {
     }
   });
 });
+
+// GET /orders/isactive/:act
+// Returns all active orders
+router.get("/isactive/:act", function (req, res, next) {
+  let sqlQuery = "SELECT * FROM Orders WHERE isactive = ? ";
+  let getData = req.params.act;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    //If no records returned, send back something indicating that
+    if (result.length > 0) {
+      res.end(JSON.stringify(result));
+    } else {
+      res.end(
+        JSON.stringify({
+          status_code: "100",
+          message: "No Records Found",
+        })
+      );
+    }
+  });
+});
+
 // GET /orders/noickup/
 // Returns all  orders where they have not been picked up
 router.get("/nopickup/", function (req, res, next) {
@@ -177,11 +202,43 @@ router.delete("/:orderid", function (req, res, next) {
   });
 });
 
-// Patch /menus/:orderid
+// delete /orders/isactive/:act
+// Deletes a row from the database for the table Orders for active
+router.delete("/isactive/:act", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Orders WHERE isactive = ?";
+  let getData = req.params.act;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.end(JSON.stringify(result));
+  });
+});
+
+
+// Patch /orders/:orderid
 // Update the provided values for a specific row in the Orders table
 router.patch("/:orderid", function (req, res, next) {
   mysql.pool.query(
     "UPDATE Orders SET ? WHERE order_id = " + [req.params.orderid],
+    req.body,
+    function (err, result) {
+      if (err) {
+        next(err);
+        return;
+      }
+      res.end(JSON.stringify(result));
+    }
+  );
+});
+
+// Patch /orders/isactive/:act
+// Update the provided values for a specific row in the Orders table for active
+router.patch("/isactive/:act", function (req, res, next) {
+  mysql.pool.query(
+    "UPDATE Orders SET ? WHERE isactive = " + [req.params.act]
+    + " AND order_id = ?" + [req.params.orderid],
     req.body,
     function (err, result) {
       if (err) {
