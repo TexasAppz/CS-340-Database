@@ -3,7 +3,6 @@ let express = require("express");
 let router = express.Router();
 let mysql = require("../dbcon.js");
 
-// GET /ingredients
 // Returns all values from the database for the table Menus
 router.get("/", function (req, res, next) {
   let sqlQuery = `SELECT *
@@ -19,7 +18,6 @@ router.get("/", function (req, res, next) {
   });
 });
 
-// GET /ingredients/menu_item/:menuItemId
 // Select a specific ingredient given a ingredients id
 router.get("/menu_item/:menuItemId", function (req, res, next) {
   let sqlQuery = `
@@ -70,7 +68,6 @@ router.post("/", function (req, res, next) {
   }
 });
 
-// delete /ingredients/:id
 // Deletes a row from the database for the table Customers
 router.delete("/", function (req, res, next) {
   let sqlQuery = "DELETE FROM Ingredients WHERE ingredient_id = ?";
@@ -84,7 +81,6 @@ router.delete("/", function (req, res, next) {
   });
 });
 
-// Patch /ingredients/:ingredientid
 // Update the provided values for a specific row in the Menu table
 router.patch("/", function (req, res, next) {
   mysql.pool.query(

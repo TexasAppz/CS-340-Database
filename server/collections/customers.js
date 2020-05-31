@@ -3,7 +3,6 @@ let express = require("express");
 let router = express.Router();
 let mysql = require("../dbcon.js");
 
-// GET /customers
 // Returns all values from the database for the table Customers
 router.get("/", function (req, res, next) {
   //let sqlQuery = "SELECT * FROM Customers ORDER BY customer_id";
@@ -18,7 +17,6 @@ router.get("/", function (req, res, next) {
   });
 });
 
-// GET /customers/:id
 // Returns a specific customer by id
 router.get("/:customerId", function (req, res, next) {
   let sqlQuery =
@@ -33,7 +31,6 @@ router.get("/:customerId", function (req, res, next) {
   });
 });
 
-// GET /customers/byEmail/:emailAddress
 // Returns a specific customer by email
 router.get("/byEmail/:emailAddress", function (req, res, next) {
   let sqlQuery = "SELECT * FROM Customers WHERE email = ?";
@@ -55,7 +52,6 @@ router.get("/byEmail/:emailAddress", function (req, res, next) {
   });
 });
 
-// Patch /customers/
 //Inserts new customer record
 router.post("/", function (req, res, next) {
   let sqlQuery = "INSERT INTO Customers (name, email, password) VALUES (?,?,?)";

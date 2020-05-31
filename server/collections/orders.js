@@ -15,7 +15,6 @@ router.get("/", function (req, res, next) {
   });
 });
 
-// GET /orders/status/nopickup/
 // Returns all  orders where they have not been picked up
 router.get("/status/nopickup/", function (req, res, next) {
   let sqlQuery = `
