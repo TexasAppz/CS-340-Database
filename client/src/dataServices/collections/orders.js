@@ -7,15 +7,33 @@ module.exports = function(api) {
     }
 
     function getOpenOrders() {
-        return api.get('/orders/nopickup').then(response => response.data);
+        return api
+            .get('/orders/status/nopickup')
+            .then(response => response.data);
     }
 
-    function insertOrder(customer) {
+    function createNewOrderForCustomer(customer) {
         return api.post('/orders', customer).then(response => response.data);
     }
+
+    function updateOrderSummary(order) {
+        return api.patch('/orders', order).then(response => response.data);
+    }
+
+    function saveFullOrder(order) {
+        return api.put('/orders', order).then(response => response.data);
+    }
+
+    function deleteOrder(order) {
+        return api.delete('/orders', order).then(response => response.data);
+    }
+
     return {
         getOrder,
         getOpenOrders,
-        insertOrder
+        createNewOrderForCustomer,
+        updateOrderSummary,
+        saveFullOrder,
+        deleteOrder
     };
 };

@@ -10,8 +10,22 @@ module.exports = function(api) {
             .then(response => response.data);
     }
 
+    function updateMenuItem(menuItem) {
+        return api
+            .patch('/menu_items', menuItem)
+            .then(response => response.data);
+    }
+
+    function deleteMenuItem(menuItem) {
+        return api
+            .delete('/menu_items', menuItem)
+            .then(response => response.data);
+    }
+
     return {
         getMenuItems,
-        insertMenuItem
+        insertMenuItem,
+        updateMenuItem,
+        deleteMenuItem
     };
 };

@@ -3,78 +3,28 @@ let express = require("express");
 let router = express.Router();
 let mysql = require("../dbcon.js");
 
-// GET /orders
-// Returns all values from the database for the table Orders
+// Returns all active orders from the Orders table
 router.get("/", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Orders order by order_id";
+  let sqlQuery = "SELECT * FROM Orders WHERE is_active = 1 ORDER BY order_id";
   mysql.pool.query(sqlQuery, function (err, result) {
     if (err) {
       next(err);
       return;
     }
-
-    res.end(JSON.stringify(result));
-  });
-});
-// GET /orders/new/
-// Returns all new orders
-router.get("/new/", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Orders WHERE status = 'New' ";
-  let getData = req.params.status;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    //If no records returned, send back something indicating that
-    if (result.length > 0) {
-      res.end(JSON.stringify(result));
-    } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
-    }
+    res.json(result);
   });
 });
 
-// GET /orders/isactive/:act
-// Returns all active orders
-router.get("/isactive/:act", function (req, res, next) {
-  let sqlQuery = "SELECT * FROM Orders WHERE isactive = ? ";
-  let getData = req.params.act;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    //If no records returned, send back something indicating that
-    if (result.length > 0) {
-      res.end(JSON.stringify(result));
-    } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
-    }
-  });
-});
-
-// GET /orders/noickup/
+// GET /orders/status/nopickup/
 // Returns all  orders where they have not been picked up
-router.get("/nopickup/", function (req, res, next) {
+router.get("/status/nopickup/", function (req, res, next) {
   let sqlQuery = `
     SELECT 
       o.*,
       c.name customerName
     FROM Orders o
     join Customers c on o.customer_id = c.customer_id
-    WHERE status <> 'Picked up'
-    `;
+    WHERE status <> 'Picked up' and is_active = 1`;
   let getData = req.params.status;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
@@ -83,7 +33,7 @@ router.get("/nopickup/", function (req, res, next) {
     }
     //If no records returned, send back something indicating that
     if (result.length > 0) {
-      res.end(JSON.stringify(result));
+      res.json(result);
     } else {
       res.end(
         JSON.stringify({
@@ -95,8 +45,7 @@ router.get("/nopickup/", function (req, res, next) {
   });
 });
 
-// GET /orders/noickup/
-// Returns all  orders where they have not been picked up
+// Returns and entire order
 router.get("/:orderId", function (req, res, next) {
   let thisOrder = {};
 
@@ -114,43 +63,43 @@ router.get("/:orderId", function (req, res, next) {
       if (result.length > 0) {
         thisOrder = result[0];
 
-        //--------------------------- Begin inner -----------
+        //--------------------------- Begin inner1 -----------
         mysql.pool.query(
-          `SELECT oi.*, mi.name
-          FROM Order_Items oi
-          JOIN Menu_Items mi on oi.menu_item_id = mi.menu_item_id
-          WHERE oi.order_id = ?`,
-          req.params.orderId,
+          `SELECT *
+          FROM Customers
+          WHERE customer_id = ?`,
+          thisOrder.customer_id,
           function (err, result) {
             if (err) {
               next(err);
               return;
             }
             if (result.length > 0) {
-              thisOrder.order_items = result;
+              thisOrder.customer = result;
 
               //--------------------------- Begin inner2 -----------
               mysql.pool.query(
-                `SELECT *
-                FROM Customers
-                WHERE customer_id = ?`,
-                thisOrder.customer_id,
+                `SELECT oi.*, mi.name
+                FROM Order_Items oi
+                JOIN Menu_Items mi on oi.menu_item_id = mi.menu_item_id
+                WHERE oi.order_id = ?`,
+                req.params.orderId,
                 function (err, result) {
                   if (err) {
                     next(err);
                     return;
                   }
                   if (result.length > 0) {
-                    thisOrder.customer = result;
-                    res.end(JSON.stringify(thisOrder));
+                    thisOrder.order_items = result;
                   }
+                  res.json(thisOrder);
                 }
               );
               //--------------------------- End inner2 -----------
             }
           }
         );
-        //--------------------------- End inner -----------
+        //--------------------------- End inner1 -----------
       } else {
         //If no records returned, send back something indicating that
         res.end(
@@ -165,9 +114,9 @@ router.get("/:orderId", function (req, res, next) {
 });
 
 //Inserts new order record given a customer_id
-router.post("/", function (req, res, next) {
-  let sqlQuery = "INSERT INTO Orders (customer_id, isactive) VALUES (?,1)";
-  let sqlParams = [req.body.customer_id];
+router.post("/", function (req, res) {
+  let sqlQuery = "INSERT INTO Orders (customer_id) VALUES (?)";
+  let sqlParams = req.body.customer_id;
   let isValid = true; //Could be used for a validation of the parameters
 
   let returnMsg = {};
@@ -176,10 +125,10 @@ router.post("/", function (req, res, next) {
       if (err) {
         returnMsg.status_code = 999;
         returnMsg.message = err.sqlMessage;
-        res.end(JSON.stringify(returnMsg));
+        res.json(returnMsg);
       } else {
         returnMsg.order_id = result.insertId;
-        res.end(JSON.stringify(returnMsg));
+        res.json(returnMsg);
       }
     });
   } else {
@@ -188,65 +137,40 @@ router.post("/", function (req, res, next) {
   }
 });
 
-// delete /orders/:orderid
-// Deletes a row from the database for the table Orders
-router.delete("/:orderid", function (req, res, next) {
-  let sqlQuery = "DELETE FROM Orders WHERE order_id = ?";
-  let getData = req.params.orderid;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.end(JSON.stringify(result));
-  });
-});
-
-// Patch /orders/:orderid
-// Update the provided values for a specific row in the Orders table
-router.patch("/:orderid", function (req, res, next) {
-  mysql.pool.query(
-    "UPDATE Orders SET ? WHERE order_id = " + [req.params.orderid],
-    req.body,
-    function (err, result) {
-      if (err) {
-        next(err);
-        return;
-      }
-      res.end(JSON.stringify(result));
-    }
-  );
-});
-
-// Patch /orders/
 // Update the provided values for a specific row in the Orders table
 router.patch("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Orders SET isactive = 0 WHERE order_id = " + [req.params.order_id],
+    "UPDATE Orders SET ? WHERE order_id = " + req.body.order_id,
     req.body,
     function (err, result) {
       if (err) {
         next(err);
         return;
       }
-      res.end(JSON.stringify(result));
+      res.json(result);
     }
   );
 });
 
-// Delete /orders/
+// PUT verb used to completely replace an item in the system
+router.put("/", function (req, res, next) {
+  // 1. Remove all associated Order_Items
+  // 2. Insert Order_Items from the req.body
+  // 3. Update the Orders record for the summary info (subtotal, tzx, etc.)
+  // 4. Return a message indicating if the operation was as success or not
+});
+
 // Soft-Delete the orders by setting the isactive flag to 0
 router.delete("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Orders SET isactive = 0 WHERE order_id = " +
-    [req.body.order_id],
+    "UPDATE Orders SET isactive = 0 WHERE order_id = " + req.body.order_id,
     req.body,
     function (err, result) {
       if (err) {
         next(err);
         return;
       }
-      res.end(JSON.stringify(result));
+      res.json(result);
     }
   );
 });

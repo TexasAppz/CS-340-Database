@@ -15,45 +15,18 @@ router.get("/", function (req, res, next) {
       next(err);
       return;
     }
-
-    res.end(JSON.stringify(result));
+    res.json(result);
   });
 });
 
-// GET /ingredients/:ingredientId
-// Select a specific ingredient given a ingredients id
-router.get("/:ingredientId", function (req, res, next) {
-  let sqlQuery = `SELECT ingredient_id, name
-      FROM Ingredients
-      WHERE ingredient_id = ?
-      ORDER BY name ASC`;
-  let getData = req.params.ingredientId;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    //If no records returned, send back something indicating that
-    if (result.length > 0) {
-      res.end(JSON.stringify(result));
-    } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
-    }
-  });
-});
-
-// GET /ingredients/:ingredientId
+// GET /ingredients/menu_item/:menuItemId
 // Select a specific ingredient given a ingredients id
 router.get("/menu_item/:menuItemId", function (req, res, next) {
-  let sqlQuery = `SELECT ingredient_id, name
-    FROM Ingredients
-    WHERE menu_item_id = ?
-    ORDER BY name ASC`;
+  let sqlQuery = `
+  SELECT i.ingredient_id, i.name
+  FROM Ingredients i
+  join Item_Ingredients ii on i.ingredient_id = ii.ingredient_id
+  WHERE ii.menu_item_id = ?`;
   let getData = req.params.menuItemId;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
@@ -62,14 +35,12 @@ router.get("/menu_item/:menuItemId", function (req, res, next) {
     }
     //If no records returned, send back something indicating that
     if (result.length > 0) {
-      res.end(JSON.stringify(result));
+      res.json(result);
     } else {
-      res.end(
-        JSON.stringify({
-          status_code: "100",
-          message: "No Records Found",
-        })
-      );
+      res.json({
+        status_code: "100",
+        message: "No Records Found",
+      });
     }
   });
 });
@@ -77,7 +48,7 @@ router.get("/menu_item/:menuItemId", function (req, res, next) {
 //Inserts new Ingredients record
 router.post("/", function (req, res, next) {
   let sqlQuery = "INSERT INTO Ingredients (name) VALUES (?)";
-  let sqlParams = [req.body.name];
+  let sqlParams = req.body.name;
   let isValid = true; //Could be used for a validation of the parameters
 
   let returnMsg = {};
@@ -86,46 +57,45 @@ router.post("/", function (req, res, next) {
       if (err) {
         returnMsg.status_code = 999;
         returnMsg.message = err.sqlMessage;
-        res.end(JSON.stringify(returnMsg));
+        res.json(returnMsg);
       } else {
         returnMsg.ingredient_id = result.insertId;
-        res.end(JSON.stringify(returnMsg));
+        res.json(returnMsg);
       }
     });
   } else {
     returnMsg.status_code = 0;
     returnMsg.message = "Invalid data";
-    res.end(JSON.stringify(returnMsg));
+    res.json(returnMsg);
   }
 });
 
 // delete /ingredients/:id
 // Deletes a row from the database for the table Customers
-router.delete("/:ingredientid", function (req, res, next) {
+router.delete("/", function (req, res, next) {
   let sqlQuery = "DELETE FROM Ingredients WHERE ingredient_id = ?";
-  let getData = req.params.ingredientid;
+  let getData = req.body.ingredient_id;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
       next(err);
       return;
     }
-    res.end(JSON.stringify(result));
+    res.json(result);
   });
 });
 
 // Patch /ingredients/:ingredientid
 // Update the provided values for a specific row in the Menu table
-router.patch("/:ingredientid", function (req, res, next) {
+router.patch("/", function (req, res, next) {
   mysql.pool.query(
-    "UPDATE Ingredients SET ? WHERE ingredient_id = " +
-      [req.params.ingredientid],
+    "UPDATE Ingredients SET ? WHERE ingredient_id = " + req.body.ingredient_id,
     req.body,
     function (err, result) {
       if (err) {
         next(err);
         return;
       }
-      res.end(JSON.stringify(result));
+      res.json(result);
     }
   );
 });

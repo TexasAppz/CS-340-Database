@@ -18,8 +18,12 @@ module.exports = function(api) {
         return api.post('/menus', menu).then(response => response.data);
     }
 
-    function deleteMenu(menu_id) {
-        return api.delete('/menus/' + menu_id).then(response => response.data);
+    function updateMenu(menu) {
+        return api.post('/menus', menu).then(response => response.data);
+    }
+
+    function deleteMenu(menu) {
+        return api.delete('/menus', menu).then(response => response.data);
     }
 
     return {
@@ -27,6 +31,7 @@ module.exports = function(api) {
         getNavMenus,
         getMenu,
         insertMenu,
+        updateMenu,
         deleteMenu
     };
 };
