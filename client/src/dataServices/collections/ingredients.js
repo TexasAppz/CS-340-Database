@@ -26,7 +26,7 @@ module.exports = function(api) {
 
     function updateIngredient(ingredient) {
         return api
-            .patch('/ingredients/' + ingredient.ingredient_id, ingredient)
+            .patch('/ingredients', ingredient)
             .then(response => response.data);
     }
     return {

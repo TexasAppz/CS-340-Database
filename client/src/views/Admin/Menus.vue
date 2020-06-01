@@ -39,7 +39,12 @@
             </b-table>
         </div>
         <div>
-            <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
+            <b-modal
+                id="modalForm1"
+                :title="formTitle"
+                @ok="OkClicked()"
+                @hidden="getMenus()"
+            >
                 <b-form>
                     <b-form-input
                         id="input-1"
@@ -77,7 +82,9 @@ export default {
             });
         },
         deleteItem(item) {
-            alert(item.name + ' would be deleted');
+            dataService.menus.deleteMenu(item).then(() => {
+                this.getMenus();
+            });
         },
         editItem(item) {
             this.selectedItem = item;
@@ -90,9 +97,10 @@ export default {
             this.$bvModal.show('modalForm1');
         },
         OkClicked() {
+            console.log(this.selectedItem);
             if (this.selectedItem.menu_id !== undefined) {
                 if (this.IsValidMenuObject(this.selectedItem)) {
-                    alert('TODO: Update menu');
+                    dataService.menus.updateMenu(this.selectedItem);
                 } else {
                     alert('Name required.');
                     this.getMenus();

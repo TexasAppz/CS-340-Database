@@ -27,12 +27,21 @@ export default new Vuex.Store({
         customer: function(state) {
             return state.customer;
         },
+        order_id: function(state) {
+            return state.order_id;
+        },
+        status: function(state) {
+            return state.status;
+        },
         numItemsInCart: function(state) {
             let totalItems = 0;
             let cart = state.cart;
-            for (let i = 0; i < cart.length; ++i) {
-                totalItems += cart[i].qty;
+            if (cart) {
+                for (let i = 0; i < cart.length; ++i) {
+                    totalItems += cart[i].qty;
+                }
             }
+
             return totalItems;
         },
         currentCart: function(state) {
@@ -48,11 +57,15 @@ export default new Vuex.Store({
         },
         ADD_TO_CART(state, payload) {
             let updated = false;
-            for (let i = 0; i < state.cart.length; ++i) {
-                if (state.cart[i].menu_item_id === payload.menu_item_id) {
-                    state.cart[i].qty += payload.qty;
-                    updated = true;
+            if (state.cart) {
+                for (let i = 0; i < state.cart.length; ++i) {
+                    if (state.cart[i].menu_item_id === payload.menu_item_id) {
+                        state.cart[i].qty += payload.qty;
+                        updated = true;
+                    }
                 }
+            } else {
+                this.state.cart = [];
             }
 
             if (!updated) {
@@ -67,7 +80,6 @@ export default new Vuex.Store({
             }
         },
         UPDATE_CART_ITEM(state, payload) {
-            console.log(payload);
             for (let i = 0; i < state.cart.length; ++i) {
                 if (state.cart[i].menu_item_id === payload.menu_item_id) {
                     state.cart[i].qty = payload.qty;
@@ -76,9 +88,11 @@ export default new Vuex.Store({
         },
         UPDATE_CART_SUMMARY(state) {
             state.cartSummary.subTotal = 0;
-            for (let i = 0; i < state.cart.length; ++i) {
-                state.cartSummary.subTotal +=
-                    state.cart[i].qty * state.cart[i].price;
+            if (state.cart) {
+                for (let i = 0; i < state.cart.length; ++i) {
+                    state.cartSummary.subTotal +=
+                        state.cart[i].qty * state.cart[i].price;
+                }
             }
 
             state.cartSummary.tax = state.cartSummary.subTotal * 0.075;
@@ -99,6 +113,14 @@ export default new Vuex.Store({
         },
         SET_FULL_CART(state, payload) {
             state.cart = payload;
+        },
+        CLEAR_CART(state) {
+            state.order_id = null;
+            state.cart = [];
+            state.status = null;
+            state.cartSummary.subTotal = 0;
+            state.cartSummary.tax = 0;
+            state.cartSummary.grandTotal = 0;
         }
     },
     actions: {
@@ -133,13 +155,24 @@ export default new Vuex.Store({
             }
         },
         setOrder(context, payload) {
-            dataService.orders.getOrder(payload).then(function(result) {
+            return dataService.orders.getOrder(payload).then(function(result) {
+                context.commit('CLEAR_CART');
                 context.commit('UPDATE_ORDER_STATUS', result.status);
                 context.commit('SET_CURRENT_ORDER_ID', result.order_id);
                 context.commit('SET_CURRENT_CUSTOMER', result.customer[0]);
                 context.commit('SET_FULL_CART', result.order_items);
                 context.commit('UPDATE_CART_SUMMARY');
             });
+        },
+        placeOrder(context) {
+            return new Promise((resolve, reject) => {
+                dataService.placeNewOrder(context);
+            }).then(() => {
+                context.commit('CLEAR_CART');
+            });
+        },
+        updateOrder(context) {
+            return dataService.updateOrder(context.state);
         }
     }
 });

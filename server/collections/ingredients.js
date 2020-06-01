@@ -68,19 +68,6 @@ router.post("/", function (req, res, next) {
   }
 });
 
-// Deletes a row from the database for the table Customers
-router.delete("/", function (req, res, next) {
-  let sqlQuery = "DELETE FROM Ingredients WHERE ingredient_id = ?";
-  let getData = req.body.ingredient_id;
-  mysql.pool.query(sqlQuery, getData, function (err, result) {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.json(result);
-  });
-});
-
 // Update the provided values for a specific row in the Menu table
 router.patch("/", function (req, res, next) {
   mysql.pool.query(
@@ -94,6 +81,19 @@ router.patch("/", function (req, res, next) {
       res.json(result);
     }
   );
+});
+
+// Deletes a row from the database for the table Customers
+router.delete("/:id", function (req, res, next) {
+  let sqlQuery = "DELETE FROM Ingredients WHERE ingredient_id = ?";
+  let getData = req.params.id;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.json(result);
+  });
 });
 
 //Required to work!!!!!

@@ -65,7 +65,12 @@
             ></b-pagination>
         </div>
         <div>
-            <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
+            <b-modal
+                id="modalForm1"
+                :title="formTitle"
+                @ok="OkClicked()"
+                @hidden="getIngredients()"
+            >
                 <b-form>
                     <b-form-input
                         id="input-1"

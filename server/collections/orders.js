@@ -23,7 +23,7 @@ router.get("/status/nopickup/", function (req, res, next) {
       c.name customerName
     FROM Orders o
     join Customers c on o.customer_id = c.customer_id
-    WHERE status <> 'Picked up' and is_active = 1`;
+    WHERE status <> 'Picked up' and o.is_active = 1`;
   let getData = req.params.status;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
@@ -160,18 +160,16 @@ router.put("/", function (req, res, next) {
 });
 
 // Soft-Delete the orders by setting the isactive flag to 0
-router.delete("/", function (req, res, next) {
-  mysql.pool.query(
-    "UPDATE Orders SET isactive = 0 WHERE order_id = " + req.body.order_id,
-    req.body,
-    function (err, result) {
-      if (err) {
-        next(err);
-        return;
-      }
-      res.json(result);
+router.delete("/:id", function (req, res, next) {
+  let sqlQuery = "UPDATE Orders SET isactive = 0 WHERE order_id = ?";
+  let getData = req.params.id;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
     }
-  );
+    res.json(result);
+  });
 });
 
 module.exports = router;

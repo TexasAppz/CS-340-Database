@@ -81,9 +81,9 @@ router.patch("/", function (req, res, next) {
 });
 
 // Deletes a row from the database for the table Order_Items
-router.delete("/", function (req, res, next) {
+router.delete("/:id", function (req, res, next) {
   let sqlQuery = "DELETE FROM Order_Items WHERE order_item_id = ?";
-  let getData = req.body.order_item_id;
+  let getData = req.params.id;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
       next(err);

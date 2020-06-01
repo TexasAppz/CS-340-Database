@@ -19,11 +19,13 @@ module.exports = function(api) {
     }
 
     function updateMenu(menu) {
-        return api.post('/menus', menu).then(response => response.data);
+        return api.patch('/menus', menu).then(response => response.data);
     }
 
     function deleteMenu(menu) {
-        return api.delete('/menus', menu).then(response => response.data);
+        return api
+            .delete('/menus/' + menu.menu_id)
+            .then(response => response.data);
     }
 
     return {

@@ -26,6 +26,23 @@ router.get("/", function (req, res, next) {
   });
 });
 
+// Returns all ingredents from the database for a given menu item
+router.get("/:id/ingredients", function (req, res, next) {
+  let sqlQuery = `
+    SELECT ii.* , i.name
+    FROM Ingredients i
+    join Item_Ingredients ii on i.ingredient_id = ii.ingredient_id
+    WHERE menu_item_id = ?`;
+
+  mysql.pool.query(sqlQuery, req.params.id, function (err, result) {
+    if (err) {
+      next(err);
+      return;
+    }
+    res.json(result);
+  });
+});
+
 // Create a new menu item given a new name, price, and a menu id to associate if applicable.
 router.post("/", function (req, res, next) {
   let sqlQuery = `
@@ -68,18 +85,16 @@ router.patch("/", function (req, res, next) {
 });
 
 // Soft-Delete the menu_items by setting the isactive flag to 0
-router.delete("/", function (req, res, next) {
-  mysql.pool.query(
-    "UPDATE Menu_Items SET is_active = 0 WHERE menu_item_id = ?",
-    req.body.menu_item_id,
-    function (err, result) {
-      if (err) {
-        next(err);
-        return;
-      }
-      res.json(result);
+router.delete("/:id", function (req, res, next) {
+  let sqlQuery = "UPDATE Menu_Items SET is_active = 0 WHERE menu_item_id = ?";
+  let getData = req.params.id;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
     }
-  );
+    res.json(result);
+  });
 });
 
 module.exports = router;

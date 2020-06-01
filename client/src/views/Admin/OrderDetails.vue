@@ -16,6 +16,7 @@
                         v-model="order.order_status"
                         :options="orderStatuses"
                         style="width:200px;margin-right:10px;margin-bottom:10px"
+                        @change="updateOrderStatus(order.order_status)"
                     ></b-form-select>
                 </span>
             </div>
@@ -83,7 +84,9 @@
                     >
                 </div>
                 <div class="cartSummaryItem" style="margin-top:20px">
-                    <b-button variant="primary">Save Order</b-button>
+                    <b-button variant="primary" @click="saveOrderToDatabase()"
+                        >Save Order</b-button
+                    >
                 </div>
             </div>
         </div>
@@ -100,10 +103,10 @@ export default {
             menuItemSelected: null,
             menuItems: [],
             orderStatuses: [
-                { text: 'New' },
-                { text: 'In Process' },
-                { text: 'Ready for Pickup' },
-                { text: 'Picked Up' }
+                { text: 'New', value: 'New' },
+                { text: 'In Process', value: 'In Process' },
+                { text: 'Ready for Pickup', value: 'Ready' },
+                { text: 'Picked Up', value: 'Picked Up' }
             ],
             order: {
                 order_id: null,
@@ -153,6 +156,14 @@ export default {
         },
         deleteItem(item) {
             store.dispatch('removeFromCart', item);
+        },
+        updateOrderStatus() {
+            store.dispatch('setOrderStatus', this.order.order_status);
+        },
+        saveOrderToDatabase() {
+            store.dispatch('updateOrder').then(() => {
+                alert('Order ' + store.getters.order_id + ' Updated');
+            });
         }
     },
     asyncComputed: {
@@ -176,7 +187,10 @@ export default {
     },
     mounted() {
         this.order.order_id = this.$route.params.id;
-        store.dispatch('setOrder', this.$route.params.id);
+        store.dispatch('setOrder', this.$route.params.id).then(() => {
+            console.log(store.getters.status);
+            this.order.order_status = store.getters.status;
+        });
     }
 };
 </script>

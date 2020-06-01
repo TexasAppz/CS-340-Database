@@ -59,17 +59,19 @@ export default {
     },
     methods: {
         listWithCommas(list) {
-            let rtn = list[0].name;
-            if (list.length > 0) {
-                for (let i = 1; i < list.length; ++i) {
-                    if (i + 1 == list.length) {
-                        rtn += ' and ' + list[i].name;
-                    } else {
-                        rtn += ',' + list[i].name;
+            let rtn = '';
+            if (list[0]) {
+                rtn = list[0].name;
+                if (list.length > 0) {
+                    for (let i = 1; i < list.length; ++i) {
+                        if (i + 1 == list.length) {
+                            rtn += ' and ' + list[i].name;
+                        } else {
+                            rtn += ',' + list[i].name;
+                        }
                     }
                 }
             }
-            //console.log(rtn);
             return rtn;
         },
         addToCart() {

@@ -46,7 +46,12 @@
                     >
                 </div>
                 <div class="cartSummaryItem" style="margin-top:20px">
-                    <b-button variant="primary">Place Order</b-button>
+                    <b-button
+                        variant="primary"
+                        @click="placeOrder()"
+                        v-show="HasItemsInCart"
+                        >Place Order</b-button
+                    >
                 </div>
             </div>
         </div>
@@ -87,6 +92,9 @@ export default {
         },
         cartSummary: function() {
             return store.getters.currentCartSummary;
+        },
+        HasItemsInCart: function() {
+            return this.cart.length !== 0;
         }
     },
     methods: {
@@ -95,6 +103,16 @@ export default {
         },
         deleteItem(item) {
             store.dispatch('removeFromCart', item);
+        },
+        placeOrder() {
+            if (store.getters.customer === null) {
+                alert('Please login, so we know placed this order.');
+            } else {
+                store.dispatch('placeOrder').then(() => {
+                    // route to order display page
+                    alert('route to order display page');
+                });
+            }
         }
     }
 };

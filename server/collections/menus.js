@@ -46,7 +46,7 @@ router.get("/:id", function (req, res, next) {
       JOIN Menu_Items mi on m.menu_id = mi.menu_id 
       left outer JOIN Item_Ingredients ii on mi.menu_item_id = ii.menu_item_id 
       left outer JOIN Ingredients i on ii.ingredient_id = i.ingredient_id 
-    WHERE 
+    WHERE mi.is_active = 1 and
       m.menu_id = ? 
     `;
 
@@ -127,7 +127,7 @@ router.get("/search/:phrase", function (req, res, next) {
       JOIN Menu_Items mi on m.menu_id = mi.menu_id 
       left outer JOIN Item_Ingredients ii on mi.menu_item_id = ii.menu_item_id 
       left outer JOIN Ingredients i on ii.ingredient_id = i.ingredient_id 
-      WHERE 
+      WHERE mi.is_active = 1 and
       mi.name like '%` +
     req.params.phrase +
     `%' or i.name like '%` +
@@ -235,9 +235,9 @@ router.patch("/", function (req, res, next) {
 });
 
 // Deletes a row from the database for the table Customers
-router.delete("/", function (req, res, next) {
+router.delete("/:id", function (req, res, next) {
   let sqlQuery = "DELETE FROM Menus WHERE menu_id = ?";
-  let getData = req.body.menu_id;
+  let getData = req.params.id;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
       next(err);

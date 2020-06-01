@@ -4,6 +4,12 @@ module.exports = function(api) {
         return api.get('/menu_items').then(response => response.data);
     }
 
+    function getMenuItemIngredients(menuItem) {
+        return api
+            .get('/menu_items/' + menuItem.menu_item_id + '/ingredients')
+            .then(response => response.data);
+    }
+
     function insertMenuItem(menuItem) {
         return api
             .post('/menu_items', menuItem)
@@ -24,6 +30,7 @@ module.exports = function(api) {
 
     return {
         getMenuItems,
+        getMenuItemIngredients,
         insertMenuItem,
         updateMenuItem,
         deleteMenuItem

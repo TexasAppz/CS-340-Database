@@ -95,18 +95,16 @@ router.patch("/", function (req, res, next) {
 
 // Delete /customers/
 // Soft-Delete the customer by setting the isactive flag to 0
-router.delete("/", function (req, res, next) {
-  mysql.pool.query(
-    "UPDATE Customers SET is_active = 0 WHERE customer_id = ?",
-    req.body.customer_id,
-    function (err, result) {
-      if (err) {
-        next(err);
-        return;
-      }
-      res.json(result);
+router.delete("/:id", function (req, res, next) {
+  let sqlQuery = "UPDATE Customers SET is_active = 0 WHERE customer_id = ?";
+  let getData = req.params.id;
+  mysql.pool.query(sqlQuery, getData, function (err, result) {
+    if (err) {
+      next(err);
+      return;
     }
-  );
+    res.json(result);
+  });
 });
 
 module.exports = router;

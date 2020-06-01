@@ -30,9 +30,9 @@ router.post("/", function (req, res, next) {
 });
 
 // Deletes a record from the Item_Ingredients table
-router.delete("/", function (req, res, next) {
+router.delete("/:id", function (req, res, next) {
   let sqlQuery = "DELETE FROM Item_Ingredients WHERE item_ingredient_id = ?";
-  let getData = req.body.item_ingredient_id;
+  let getData = req.params.id;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {
       next(err);

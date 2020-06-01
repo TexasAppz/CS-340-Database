@@ -40,46 +40,100 @@
         </div>
 
         <div>
-            <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
+            <b-modal
+                id="modalForm1"
+                :title="formTitle"
+                @ok="OkClicked()"
+                @hidden="getMenuItems()"
+            >
                 <b-form>
-                    <b-form-input
-                        id="input-name"
-                        type="text"
-                        placeholder="Name"
-                        style="margin:8px;"
-                        v-model="selectedItem.name"
-                        required
-                    >
-                    </b-form-input>
-                    <b-form-input
-                        id="input-price"
-                        type="number"
-                        style="margin:8px;"
-                        placeholder="1.00"
-                        step="0.01"
-                        min="1"
-                        max="25"
-                        v-model="selectedItem.price"
-                        required
-                    >
-                    </b-form-input>
-                    <fieldset style="margin-left:20px;">
-                        <legend>On Menu</legend>
-                        <b-form-select
-                            v-model="selectedItem.menu_id"
-                            :options="menus"
-                            style="margin-right:10px"
-                        ></b-form-select>
-                        <div
-                            style="color:red;text-align:center"
-                            v-if="selectedItem.menu_item_id"
-                        >
-                            <hr />
-                            Still working on having and editable ingredients
-                            list here<br /><br />
-                            This will be one of our M:M
-                        </div>
-                    </fieldset>
+                    <b-tabs>
+                        <b-tab title="Menu Item Info" style="padding-top:20px;">
+                            <label>Menu Item Name</label>
+                            <b-form-input
+                                id="input-name"
+                                type="text"
+                                placeholder="Name"
+                                style="margin:8px;"
+                                v-model="selectedItem.name"
+                                required
+                            >
+                            </b-form-input>
+                            <label>Price</label>
+                            <b-form-input
+                                id="input-price"
+                                type="number"
+                                style="margin:8px;"
+                                placeholder="1.00"
+                                step="0.01"
+                                min="1"
+                                max="25"
+                                v-model="selectedItem.price"
+                                required
+                            >
+                            </b-form-input>
+
+                            <label>On Menu</label>
+                            <b-form-select
+                                v-model="selectedItem.menu_id"
+                                :options="menus"
+                                style="margin-right:10px"
+                            ></b-form-select>
+                            <div
+                                style="color:red;text-align:center"
+                                v-if="selectedItem.menu_item_id"
+                            ></div>
+                        </b-tab>
+                        <b-tab title="Ingredients">
+                            <div>
+                                <table>
+                                    <tr>
+                                        <td width="100%">
+                                            <b-form-select
+                                                v-model="selectedIngredient"
+                                                :options="ingredients"
+                                                style="margin-right:10px"
+                                            ></b-form-select>
+                                        </td>
+                                        <td>
+                                            <b-button
+                                                @click="
+                                                    addIngredient(
+                                                        selectedIngredient
+                                                    )
+                                                "
+                                                >Add</b-button
+                                            >
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <b-table
+                                striped
+                                hover
+                                :items="menuItemIngredients"
+                                :fields="miFields"
+                            >
+                                <template v-slot:cell(Delete)="item">
+                                    <div>
+                                        <span
+                                            class="actionIcon deleteIcon"
+                                            @click="
+                                                deleteItemIngredient(item.item)
+                                            "
+                                        >
+                                            <font-awesome-icon
+                                                icon="minus-circle"
+                                                size="lg"
+                                            />
+                                            <span>Delete</span>
+                                        </span>
+                                    </div>
+                                </template>
+                            </b-table>
+                        </b-tab>
+                    </b-tabs>
                 </b-form>
             </b-modal>
         </div>
@@ -96,8 +150,18 @@ export default {
         //view model
         return {
             menus: [],
+            ingredients: [],
+            selectedIngredient: null,
             menuItems: [],
             selectedItem: {},
+            menuItemIngredients: [],
+            miFields: [
+                {
+                    key: 'name',
+                    label: 'Ingredient Name'
+                },
+                'Delete'
+            ],
             formTitle: '',
             name: 'Menu Item',
             fields: [
@@ -125,6 +189,7 @@ export default {
     mounted() {
         this.getMenus();
         this.getMenuItems();
+        this.getIngredients();
     },
     methods: {
         getMenus() {
@@ -141,15 +206,50 @@ export default {
             });
         },
         getMenuItems() {
-            dataService.menuItems.getMenuItems().then(data => {
-                this.menuItems = data;
+            dataService.menuItems
+                .getMenuItems(this.selectedItem.menu_item_id)
+                .then(data => {
+                    this.menuItems = data;
+                });
+        },
+        getMenuItemIngredients(item) {
+            dataService.menuItems.getMenuItemIngredients(item).then(data => {
+                this.menuItemIngredients = data;
             });
+        },
+        getIngredients() {
+            dataService.ingredients.getIngredients().then(data => {
+                this.ingredients = [];
+                for (let i = 0; i < data.length; i++) {
+                    this.ingredients.push({
+                        text: data[i].name,
+                        value: data[i].ingredient_id
+                    });
+                }
+            });
+        },
+        addIngredient(item) {
+            let obj = {
+                menu_item_id: this.selectedItem.menu_item_id,
+                ingredient_id: item
+            };
+            dataService.item_ingredients.insertItemIngredient(obj).then(() => {
+                this.getMenuItemIngredients(this.selectedItem);
+            });
+            this.$bvModal.show('modalForm1');
         },
         deleteItem(item) {
             alert(item.name + ' would be deleted.');
         },
+        deleteItemIngredient(item) {
+            dataService.item_ingredients.deleteItemIngredient(item).then(() => {
+                this.getMenuItemIngredients(item);
+                this.editItem(item);
+            });
+        },
         editItem(item) {
             this.selectedItem = item;
+            this.getMenuItemIngredients(item);
             this.formTitle = 'Edit Menu Item';
             this.$bvModal.show('modalForm1');
         },
@@ -162,14 +262,20 @@ export default {
             if (this.selectedItem.menu_item_id !== undefined) {
                 //Edit Menu Item
                 if (this.IsValidObject(this.selectedItem)) {
-                    alert('TODO: Update menu');
+                    let i = this.selectedItem;
+                    let mi = {
+                        menu_item_id: i.menu_item_id,
+                        menu_id: i.menu_id,
+                        name: i.name,
+                        price: i.price
+                    };
+                    dataService.menuItems.updateMenuItem(mi);
                 } else {
-                    alert('Invalid Vaid');
+                    alert('Invalid Form');
                     this.getMenus();
                 }
             } else {
                 //Add New Menu Item
-                console.log(this.selectedItem);
                 if (this.IsValidObject(this.selectedItem)) {
                     dataService.menuItems
                         .insertMenuItem(this.selectedItem)

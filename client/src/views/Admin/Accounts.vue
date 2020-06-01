@@ -40,7 +40,12 @@
                 </template>
             </b-table>
         </div>
-        <b-modal id="modalForm1" :title="formTitle" @ok="OkClicked()">
+        <b-modal
+            id="modalForm1"
+            :title="formTitle"
+            @ok="OkClicked()"
+            @hidden="getAccounts()"
+        >
             <b-form>
                 <b-form-input
                     id="name"

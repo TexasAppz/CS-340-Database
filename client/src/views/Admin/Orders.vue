@@ -109,7 +109,7 @@ export default {
         OkClicked() {
             if (this.selectedCustomer) {
                 dataService.orders
-                    .insertOrder(this.selectedCustomer)
+                    .createNewOrderForCustomer(this.selectedCustomer)
                     .then(() => {
                         this.getOpenOrders();
                     });
