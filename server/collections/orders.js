@@ -161,7 +161,7 @@ router.put("/", function (req, res, next) {
 
 // Soft-Delete the orders by setting the isactive flag to 0
 router.delete("/:id", function (req, res, next) {
-  let sqlQuery = "UPDATE Orders SET isactive = 0 WHERE order_id = ?";
+  let sqlQuery = "UPDATE Orders SET is_active = 0 WHERE order_id = ?";
   let getData = req.params.id;
   mysql.pool.query(sqlQuery, getData, function (err, result) {
     if (err) {

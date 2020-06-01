@@ -94,7 +94,10 @@
 </template>
 
 <script>
+/*eslint no-unused-vars: "off"*/
+
 import store from '@/store/index';
+import router from '@/router/index';
 import dataService from '../../dataServices';
 
 export default {
@@ -163,6 +166,9 @@ export default {
         saveOrderToDatabase() {
             store.dispatch('updateOrder').then(() => {
                 alert('Order ' + store.getters.order_id + ' Updated');
+                router.push({ name: 'AdminOrders' }).catch(err => {
+                    alert(err);
+                });
             });
         }
     },
@@ -188,7 +194,6 @@ export default {
     mounted() {
         this.order.order_id = this.$route.params.id;
         store.dispatch('setOrder', this.$route.params.id).then(() => {
-            console.log(store.getters.status);
             this.order.order_status = store.getters.status;
         });
     }

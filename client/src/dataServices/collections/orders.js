@@ -25,7 +25,6 @@ module.exports = function(api) {
             tax: order.cartSummary.tax,
             total: order.cartSummary.grandTotal
         };
-        console.log(dbOrder);
         return api.patch('/orders', dbOrder).then(response => response.data);
     }
 

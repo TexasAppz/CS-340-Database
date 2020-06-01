@@ -20,7 +20,7 @@
                     <div>
                         <span
                             class="actionIcon deleteIcon"
-                            @click="deleteItem(item.item)"
+                            @click="showDeleteConfirmation(item.item)"
                         >
                             <font-awesome-icon icon="minus-circle" size="lg" />
                             <span>Delete</span>
@@ -51,6 +51,18 @@
                     ></b-form-select
                 ></b-form>
             </b-modal>
+            <b-modal
+                id="modal-delete"
+                title="Delete Confirmation"
+                okTitle="Yes"
+                cancelTitle="No"
+                @ok="deleteOrder()"
+                @cancel="cancelDelete()"
+            >
+                <b-form>
+                    Are you sure you want to delete this order?
+                </b-form>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -69,6 +81,7 @@ export default {
             openOrders: [],
             name: 'Orders (Not Yet Picked Up)',
             selectedCustomer: null,
+            selectedOrderToBeDeleted: null,
             customers: [],
             fields: [
                 'Edit',
@@ -80,9 +93,19 @@ export default {
         };
     },
     methods: {
-        deleteItem(item) {
-            alert('Order number ' + item.order_id + ' would be deleted');
-            console.log(item);
+        showDeleteConfirmation(item) {
+            this.selectedOrderToBeDeleted = item;
+            this.$bvModal.show('modal-delete');
+        },
+        cancelDelete() {
+            this.selectedOrderToBeDeleted = null;
+        },
+        deleteOrder() {
+            dataService.orders
+                .deleteOrder(this.selectedOrderToBeDeleted)
+                .then(() => {
+                    this.getOpenOrders();
+                });
         },
         editItem(item) {
             router
