@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Menu from '../views/Menu.vue';
+import Search from '../views/SearchResults.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Cart from '../views/Cart.vue';
@@ -29,6 +30,11 @@ const routes = [
         path: '/Menu',
         name: 'Menu',
         component: Menu
+    },
+    {
+        path: '/Menu/SearchResults/:phrase',
+        name: 'Search',
+        component: Search
     },
     {
         path: '/Menu/:id',

@@ -53,8 +53,9 @@
                         class="mr-sm-2"
                         placeholder="Search Menus"
                         id="searchInput"
+                        v-model="searchPhrase"
                     ></b-form-input>
-                    <b-button size="sm" class="my-2 my-sm-0" @click="doSearch"
+                    <b-button size="sm" class="my-2 my-sm-0" @click="doSearch()"
                         >Search</b-button
                     >
                 </b-nav-form>
@@ -140,6 +141,7 @@ export default {
     //name: 'main',
     data() {
         return {
+            searchPhrase: null,
             isLoggedIn: false
         };
     },
@@ -179,10 +181,15 @@ export default {
             router.replace({ path: `/Admin/Orders` }).catch(err => {});
         },
         doSearch() {
-            alert(
-                'Searching for... ' +
-                    document.getElementById('searchInput').value
-            );
+            if (this.searchPhrase) {
+                router
+                    .replace({
+                        path: `/menu/SearchResults/${this.searchPhrase}`
+                    })
+                    .catch(err => {});
+            } else {
+                router.push({ name: 'Home' }).catch(err => {});
+            }
         },
         logout() {
             let userCredentials = null;

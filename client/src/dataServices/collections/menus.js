@@ -4,6 +4,12 @@ module.exports = function(api) {
         return api.get('/menus').then(response => response.data);
     }
 
+    function getMenuSearch(phrase) {
+        return api
+            .get('/menus/search/' + phrase)
+            .then(response => response.data);
+    }
+
     function getNavMenus() {
         return api.get('/menus/nav').then(response => response.data);
     }
@@ -30,6 +36,7 @@ module.exports = function(api) {
 
     return {
         getMenus,
+        getMenuSearch,
         getNavMenus,
         getMenu,
         insertMenu,
