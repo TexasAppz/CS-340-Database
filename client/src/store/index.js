@@ -165,11 +165,12 @@ export default new Vuex.Store({
             });
         },
         placeOrder(context) {
-            return new Promise((resolve, reject) => {
-                dataService.placeNewOrder(context);
-            }).then(() => {
-                context.commit('CLEAR_CART');
-            });
+            return dataService
+                .placeNewOrder(context.state)
+                .then(function(newOrderId) {
+                    context.commit('CLEAR_CART');
+                    return newOrderId;
+                });
         },
         updateOrder(context) {
             return dataService.updateOrder(context.state);

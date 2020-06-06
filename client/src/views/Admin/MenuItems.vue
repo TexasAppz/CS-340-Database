@@ -18,7 +18,7 @@
                     <div>
                         <span
                             class="actionIcon deleteIcon"
-                            @click="deleteItem(item.item)"
+                            @click="showDeleteConfirmation(item.item)"
                         >
                             <font-awesome-icon icon="minus-circle" size="lg" />
                             <span>Delete</span>
@@ -136,6 +136,18 @@
                     </b-tabs>
                 </b-form>
             </b-modal>
+            <b-modal
+                id="modal-delete"
+                title="Delete Confirmation"
+                okTitle="Yes"
+                cancelTitle="No"
+                @ok="doDelete()"
+                @cancel="cancelDelete()"
+            >
+                <b-form>
+                    Are you sure you want to delete this?
+                </b-form>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -154,6 +166,7 @@ export default {
             selectedIngredient: null,
             menuItems: [],
             selectedItem: {},
+            selectedObjectToBeDeleted: null,
             menuItemIngredients: [],
             miFields: [
                 {
@@ -192,6 +205,13 @@ export default {
         this.getIngredients();
     },
     methods: {
+        showDeleteConfirmation(item) {
+            this.selectedObjectToBeDeleted = item;
+            this.$bvModal.show('modal-delete');
+        },
+        cancelDelete() {
+            this.selectedOrderToBeDeleted = null;
+        },
         getMenus() {
             dataService.menus.getMenus().then(data => {
                 let rtn = [];
@@ -238,8 +258,13 @@ export default {
             });
             this.$bvModal.show('modalForm1');
         },
-        deleteItem(item) {
-            alert(item.name + ' would be deleted.');
+        doDelete() {
+            console.log(this.selectedObjectToBeDeleted);
+            dataService.menuItems
+                .deleteMenuItem(this.selectedObjectToBeDeleted)
+                .then(() => {
+                    this.getMenuItems();
+                });
         },
         deleteItemIngredient(item) {
             dataService.item_ingredients.deleteItemIngredient(item).then(() => {

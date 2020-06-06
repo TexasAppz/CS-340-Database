@@ -59,7 +59,9 @@
 </template>
 
 <script>
+/*eslint no-unused-vars: "off"*/
 import store from '@/store/index';
+import router from '@/router/index';
 
 export default {
     data() {
@@ -108,9 +110,13 @@ export default {
             if (store.getters.customer === null) {
                 alert('Please login, so we know placed this order.');
             } else {
-                store.dispatch('placeOrder').then(() => {
-                    // route to order display page
-                    alert('route to order display page');
+                store.dispatch('placeOrder').then(newOrderId => {
+                    alert(
+                        'Order number ' +
+                            newOrderId +
+                            ' placed.\n You can pick it up in 15-20 mins!'
+                    );
+                    router.push({ name: 'Home' }).catch(err => {});
                 });
             }
         }

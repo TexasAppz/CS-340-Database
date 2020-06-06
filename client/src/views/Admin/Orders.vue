@@ -15,7 +15,14 @@
                     <span> Add New</span>
                 </span>
             </div>
-            <b-table striped hover :items="openOrders" :fields="fields">
+            <b-table
+                striped
+                hover
+                :items="openOrders"
+                :fields="fields"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+            >
                 <template v-slot:cell(Delete)="item">
                     <div>
                         <span
@@ -83,11 +90,13 @@ export default {
             selectedCustomer: null,
             selectedOrderToBeDeleted: null,
             customers: [],
+            sortBy: 'order_id',
+            sortDesc: false,
             fields: [
                 'Edit',
-                { key: 'order_id', label: 'Order Number' },
-                { key: 'customerName', label: 'Customer Name' },
-                { key: 'status', label: 'Status' },
+                { key: 'order_id', label: 'Order Number', sortable: true },
+                { key: 'customerName', label: 'Customer Name', sortable: true },
+                { key: 'status', label: 'Status', sortable: true },
                 'Delete'
             ]
         };

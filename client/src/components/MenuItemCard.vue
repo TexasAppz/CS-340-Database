@@ -3,7 +3,7 @@
         <b-row no-gutters>
             <b-col md="3">
                 <b-card-img
-                    src="https://picsum.photos/400/400/?image=20"
+                    :src="imageUrl"
                     alt="Image"
                     class="rounded-0"
                     fluid
@@ -50,6 +50,16 @@ export default {
         return {
             qty: 1
         };
+    },
+    computed: {
+        imageUrl() {
+            let id = this.menuItem.menu_item_id;
+            let imgUrl = 'https://picsum.photos/400/400/?image=20&ID=' + id;
+            if (this.menuItem.menu_item_id < 15) {
+                imgUrl = '/images/Menu_Items/' + id + '.jpg';
+            }
+            return imgUrl;
+        }
     },
     props: {
         menuItem: {

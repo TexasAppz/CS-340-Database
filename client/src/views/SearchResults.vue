@@ -1,7 +1,7 @@
 <template>
     <div id="menu">
         <div style="text-align:center;margin:10px">
-            <h1>{{ entireMenu.name }} Results</h1>
+            <h1>{{ entireMenu.name }} Results for {{ searchPhrase }}</h1>
         </div>
 
         <div style="width:800px; margin: 0 auto">
@@ -19,7 +19,8 @@ export default {
     data() {
         return {
             menuName: '',
-            thisMenuId: this.$route.params.id
+            thisMenuId: this.$route.params.id,
+            searchPhrase: this.$route.params.phrase
         };
     },
     asyncComputed: {

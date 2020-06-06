@@ -21,13 +21,18 @@ const item_ingredients = require('./collections/item_ingredients')(api);
 function placeNewOrder(thisOrder) {
     return orders
         .createNewOrderForCustomer(thisOrder.customer)
-        .then(function() {
-            for (let i = 0; i < thisOrder.cart; ++i) {
+        .then(function(newOrder) {
+            thisOrder.order_id = newOrder.order_id;
+            thisOrder.status = 'New';
+            for (let i = 0; i < thisOrder.cart.length; ++i) {
+                thisOrder.cart[i].order_id = thisOrder.order_id;
                 orderItems.insertOrderItemItem(thisOrder.cart[i]);
             }
+            return thisOrder.order_id;
         })
-        .then(function() {
+        .then(function(newOrderId) {
             orders.updateOrderSummary(thisOrder);
+            return newOrderId;
         });
 }
 

@@ -18,9 +18,10 @@ router.get("/", function (req, res, next) {
 // Used for the navigation drop down menu
 router.get("/nav", function (req, res, next) {
   let sqlQuery = `
-    SELECT distinct m.*
-    FROM Menus m
-    join Menu_Items mi on m.menu_id = mi.menu_id;`;
+  SELECT distinct m.*
+  FROM Menus m
+  join Menu_Items mi on m.menu_id = mi.menu_id
+  where mi.is_active = 1;`;
   mysql.pool.query(sqlQuery, function (err, result) {
     if (err) {
       next(err);

@@ -24,7 +24,7 @@ module.exports = function(api) {
 
     function deleteMenuItem(menuItem) {
         return api
-            .delete('/menu_items', menuItem)
+            .delete('/menu_items/' + menuItem.menu_item_id)
             .then(response => response.data);
     }
 
