@@ -156,7 +156,7 @@ export default {
             return '';
         },
         showCartIcon() {
-            return store.state.showCartIcon;
+            return true; //store.state.showCartIcon;
         }
     },
     asyncComputed: {
