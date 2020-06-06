@@ -54,9 +54,12 @@ export default {
     computed: {
         imageUrl() {
             let id = this.menuItem.menu_item_id;
-            let imgUrl = 'https://picsum.photos/400/400/?image=20&ID=' + id;
-            if (this.menuItem.menu_item_id < 15) {
+            let imgUrl = 'https://i.picsum.photos/id/5' + id + '/200/200.jpg';
+            if (this.menuItem.menu_item_id < 10) {
                 imgUrl = '/images/Menu_Items/' + id + '.jpg';
+                if (!window.location.href.includes('localhost')) {
+                    imgUrl = '/~cazellap' + imgUrl;
+                }
             }
             return imgUrl;
         }

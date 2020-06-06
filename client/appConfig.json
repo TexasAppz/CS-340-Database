@@ -2,5 +2,5 @@
     "apiPath-dev": "http://localhost",
     "apiPath-prod": "http://flip.engr.oregonstate.edu",
     "apiPort": 5150,
-    "InProd": false
+    "InProd": true
 }
