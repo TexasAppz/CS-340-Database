@@ -37,7 +37,7 @@
                     <div>
                         <span
                             class="actionIcon deleteIcon"
-                            @click="deleteItem(item.item)"
+                            @click="showDeleteConfirmation(item.item)"
                         >
                             <font-awesome-icon icon="minus-circle" size="lg" />
                             <span>Delete</span>
@@ -80,6 +80,18 @@
                     ></b-form-input
                 ></b-form>
             </b-modal>
+            <b-modal
+                id="modal-delete"
+                title="Delete Confirmation"
+                okTitle="Yes"
+                cancelTitle="No"
+                @ok="doDelete()"
+                @cancel="cancelDelete()"
+            >
+                <b-form>
+                    Are you sure you want to delete this?
+                </b-form>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -95,6 +107,7 @@ export default {
         return {
             ingredients: [],
             selectedItem: {},
+            selectedObjectToBeDeleted: null,
             formTitle: '',
             name: 'Ingredients',
             fields: [
@@ -126,9 +139,16 @@ export default {
                 this.ingredients = result;
             });
         },
-        deleteItem(item) {
+        showDeleteConfirmation(item) {
+            this.selectedObjectToBeDeleted = item;
+            this.$bvModal.show('modal-delete');
+        },
+        cancelDelete() {
+            this.selectedObjectToBeDeleted = null;
+        },
+        doDelete() {
             dataService.ingredients
-                .deleteIngredient(item.ingredient_id)
+                .deleteIngredient(this.selectedObjectToBeDeleted)
                 .then(() => {
                     this.getIngredients();
                 });

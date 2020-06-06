@@ -20,7 +20,7 @@
                     <div>
                         <span
                             class="actionIcon deleteIcon"
-                            @click="deleteItem(item.item)"
+                            @click="showDeleteConfirmation(item.item)"
                         >
                             <font-awesome-icon icon="minus-circle" size="lg" />
                             <span>Delete</span>
@@ -65,6 +65,18 @@
                 ></b-form-input>
             </b-form>
         </b-modal>
+        <b-modal
+            id="modal-delete"
+            title="Delete Confirmation"
+            okTitle="Yes"
+            cancelTitle="No"
+            @ok="doDelete()"
+            @cancel="cancelDelete()"
+        >
+            <b-form>
+                Are you sure you want to delete this?
+            </b-form>
+        </b-modal>
     </div>
 </template>
 
@@ -78,6 +90,7 @@ export default {
             accounts: [],
             componentKey: 0,
             selectedItem: {},
+            selectedObjectToBeDeleted: null,
             formTitle: '',
             name: 'Account Profiles',
             fields: [
@@ -97,10 +110,19 @@ export default {
                 this.accounts = result;
             });
         },
-        deleteItem(item) {
-            dataService.customers.deleteCustomer(item.customer_id).then(() => {
-                this.getAccounts();
-            });
+        showDeleteConfirmation(item) {
+            this.selectedObjectToBeDeleted = item;
+            this.$bvModal.show('modal-delete');
+        },
+        cancelDelete() {
+            this.selectedObjectToBeDeleted = null;
+        },
+        doDelete() {
+            dataService.customers
+                .deleteCustomer(this.selectedObjectToBeDeleted)
+                .then(() => {
+                    this.getAccounts();
+                });
         },
         editItem(item) {
             this.selectedItem = item;

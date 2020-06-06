@@ -16,9 +16,9 @@ module.exports = function(api) {
         return api.post('/customers', customer).then(response => response.data);
     }
 
-    function deleteCustomer(customer_id) {
+    function deleteCustomer(customer) {
         return api
-            .delete('/customers/' + customer_id)
+            .delete('/customers/' + customer.customer_id)
             .then(response => response.data);
     }
 

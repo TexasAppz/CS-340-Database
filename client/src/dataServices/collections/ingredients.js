@@ -18,9 +18,9 @@ module.exports = function(api) {
             .then(response => response.data);
     }
 
-    function deleteIngredient(ingredient_id) {
+    function deleteIngredient(ingredient) {
         return api
-            .delete('/ingredients/' + ingredient_id)
+            .delete('/ingredients/' + ingredient.ingredient_id)
             .then(response => response.data);
     }
 
