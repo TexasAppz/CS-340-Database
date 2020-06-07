@@ -84,7 +84,10 @@
                                 v-if="selectedItem.menu_item_id"
                             ></div>
                         </b-tab>
-                        <b-tab title="Ingredients">
+                        <b-tab
+                            title="Ingredients"
+                            v-if="selectedItem.menu_item_id"
+                        >
                             <div>
                                 <table>
                                     <tr>
